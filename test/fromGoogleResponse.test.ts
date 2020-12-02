@@ -1,4 +1,4 @@
-import { fromGoogleGeoCode, MissingAddressDetailsError } from "../src/index";
+import mfGeoCoder, { MissingAddressDetailsError } from "../src/index";
 import { AddressComponent, AddressGeometry, AddressType } from '@googlemaps/google-maps-services-js';
 import { googleValidResponse, noNeighborhood, nonValidStreet } from "./addresses";
 import * as dotenv from 'dotenv';
@@ -14,7 +14,7 @@ test('valid google response', async () => {
     types: googleValidResponse.results[0].types as AddressType[]
   };
 
-  const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
+  const result = await mfGeoCoder.fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
   expect(result).toStrictEqual({
     location: { lat: 40.6754925, lng: -73.9564748 },
     country: 'US',
@@ -48,7 +48,7 @@ test('non valid street', async () => {
     types: nonValidStreet.valid.results[0].types as AddressType[]
   };
 
-  const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true });
+  const result = await mfGeoCoder.fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true });
   expect(result).toStrictEqual({
     location: { lat: 40.8751173, lng: -73.90615939999999 },
     country: 'US',
@@ -74,7 +74,7 @@ test('no neighborhood and sublocality google response', async () => {
     types: noNeighborhood.results[0].types as AddressType[]
   };
 
-  const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
+  const result = await mfGeoCoder.fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
   expect(result).toStrictEqual({
     location: { lat: 41.0320206, lng: -73.76735309999999 },
     country: 'US',
@@ -103,7 +103,7 @@ test('missing required field', async () => {
   const countryIdx = googleGeoCode.address_components.findIndex(component => component.types.includes(AddressType.country));
   googleGeoCode.address_components.splice(countryIdx, 1);
 
-  try { await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true }); }
+  try { await mfGeoCoder.fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true }); }
   catch (e) {
     if (e.name === 'MissingAddressDetailsError') {
       expect((e as MissingAddressDetailsError).missingTypes.includes(AddressType.country)).toBe(true);
@@ -120,7 +120,7 @@ test('no mf auto fix', async () => {
     types: nonValidStreet.nonValid.results[0].types as AddressType[]
   };
 
-  try { await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }); }
+  try { await mfGeoCoder.fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }); }
   catch (e) {
     if (e.name === 'MissingAddressDetailsError') {
       expect((e as MissingAddressDetailsError).missingTypes.includes(AddressType.administrative_area_level_2)).toBe(true);

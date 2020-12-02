@@ -1,4 +1,4 @@
-import { fromAddressText, fromGoogleGeoCode } from "../src/index";
+import mfGeoCoder from "../src/index";
 import { AddressComponent, AddressGeometry, AddressType } from '@googlemaps/google-maps-services-js';
 import { concatedStreetNumbers, googleValidResponse } from "./addresses";
 import * as dotenv from 'dotenv';
@@ -15,7 +15,7 @@ test('valid address', async () => {
     };
 
     const address = '672 Franklin Ave #1FL, Brooklyn, NY 11238, USA';
-    const result = await fromAddressText(address, { apiKey, mfAutoFix: true });
+    const result = await mfGeoCoder.fromAddressText(address, { apiKey, mfAutoFix: true });
     expect(result).toStrictEqual({
         location: { lat: 40.6754925, lng: -73.9564748 },
         country: 'US',
@@ -42,7 +42,7 @@ test('concat street numbers', async () => {
     };
 
     const address = '110 40 72ND AVE, Forest Hills, NY 11375, USA';
-    const result = await fromAddressText(address, { apiKey, mfAutoFix: true });
+    const result = await mfGeoCoder.fromAddressText(address, { apiKey, mfAutoFix: true });
     expect(result).toStrictEqual({
         location: { lat: 40.721096, lng: -73.83973189999999 },
         country: 'US',

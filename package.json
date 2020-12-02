@@ -3,8 +3,9 @@
   "version": "1.0.3",
   "description": "JS library that uses Google Geocoding API and parses the response into a flat, readable and minimal object.",
   "main": "index.ts",
+  "types": "build/index.d.ts",
   "scripts": {
-    "build": "rm -rf build && tsc --project src",
+    "build": "rm -rf build && tsc --declaration --project src",
     "ts-watch": "tsc --project src --watch",
     "lint": "tslint --project ./src/tsconfig.json --format stylish",
     "lint-fix": "tslint --project ./src/tsconfig.json --format stylish --fix",

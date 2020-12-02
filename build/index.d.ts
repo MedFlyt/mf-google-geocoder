@@ -48,8 +48,6 @@ export declare class MissingAddressDetailsError extends Error {
     message: string;
     constructor(missingTypes: (AddressType | GeocodingAddressComponentType)[], message: string);
 }
-declare const _default: {
-    fromAddressText: (addressText: string, options: Options) => Promise<AddressDetails>;
-    fromGoogleGeoCode: (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options) => Promise<AddressDetails>;
-};
-export default _default;
+export declare const fromGoogleGeoCode: (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options) => Promise<AddressDetails>;
+export declare const fromAddressText: (addressText: string, options: Options) => Promise<AddressDetails>;
+export {};

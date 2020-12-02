@@ -44,6 +44,18 @@ via
 function fromGoogleGeoCode(googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options)
 ```
 
+##### ```GoogleGeoCodeResponse```:
+
+```javascript
+interface GoogleGeoCodeResponse {
+    address_components: googlemaps.AddressComponent[];
+    formatted_address: string;
+    types: googlemaps.AddressType[];
+    place_id: string;
+    geometry: googlemaps.AddressGeometry;
+}
+```
+
 ### options
 ```json
 interface Options {

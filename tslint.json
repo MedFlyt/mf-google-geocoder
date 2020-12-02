@@ -31,7 +31,7 @@
         "no-consecutive-blank-lines": false,
         "no-console": false,
         "no-dynamic-delete": true,
-        "no-default-export": true,
+        "no-default-export": false,
         "no-empty-interface": false,
         "no-import-side-effect": true,
         "no-mergeable-namespace": true,

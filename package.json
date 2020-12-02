@@ -33,6 +33,7 @@
   "homepage": "https://github.com/MedFlyt/mf-google-geocoder#readme",
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.1.13",
+    "dotenv": "^8.2.0",
     "tslint": "^6.1.3",
     "typescript": "^4.1.2"
   },

@@ -120,7 +120,7 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse
     }
 }
 
-const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options): Promise<AddressDetails> => {
+export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options): Promise<AddressDetails> => {
     try {
         return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse);
     }
@@ -140,7 +140,7 @@ const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResponse, o
     }
 }
 
-const fromAddressText = async (addressText: string, options: Options): Promise<AddressDetails> => {
+export const fromAddressText = async (addressText: string, options: Options): Promise<AddressDetails> => {
     let modifiedAddressText = addressText
     const streetNumbersRegex = /^([0-9]+)(\s)([0-9]+\s)/;
     if (options.mfAutoFix === undefined || options.mfAutoFix) {
@@ -199,9 +199,4 @@ function getGoogleGeoCode(addressText: string, options: Options): Promise<Google
         });
         req.end("", "utf8");
     });
-}
-
-export default {
-    fromAddressText: fromAddressText,
-    fromGoogleGeoCode: fromGoogleGeoCode
 }

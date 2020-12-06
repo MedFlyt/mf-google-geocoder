@@ -1,9 +1,10 @@
+import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
-import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 export default {
-    input: 'build/index.js',
+    input: 'src/index.ts',
     output: [
         {
             file: "./bundle/mf-geo-coder.js",
@@ -16,10 +17,11 @@ export default {
         ...Object.keys(pkg.dependencies || {})
     ],
     plugins: [
-        nodePolyfills(),
-        commonjs({
-            include: 'node_modules/**'
+        typescript({
+            typescript: require('typescript')
         }),
-        nodeResolve({ browser: true })
+        nodePolyfills(),
+        nodeResolve(),
+        commonjs()
     ]
 };

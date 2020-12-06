@@ -5,7 +5,7 @@
   "main": "index.ts",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "rm -rf build && rollup -c && tsc --declaration --project src",
+    "build": "tsc --declaration --project src && rm -rf bundle && rollup -c",
     "ts-watch": "tsc --project src --watch",
     "lint": "tslint --project ./src/tsconfig.json --format stylish",
     "lint-fix": "tslint --project ./src/tsconfig.json --format stylish --fix",
@@ -42,11 +42,10 @@
     "typescript": "^4.1.2"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-commonjs": "^17.0.0",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.10",
     "jest": "^26.6.3",
-    "rollup-plugin-external-globals": "^0.6.1",
     "ts-jest": "^26.4.4"
   }
 }

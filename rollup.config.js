@@ -1,26 +1,23 @@
-import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
-import externalGlobals from "rollup-plugin-external-globals";
+import commonjs from '@rollup/plugin-commonjs';
 export default {
-    input: 'src/index.ts',
+    input: 'build/index.js',
     output: [
         {
-            file: "./build/mf-geo-coder.js",
+            file: "./bundle/mf-geo-coder.js",
             format: 'umd',
-            name: 'mfGeoCoder'
+            name: 'mfGeoCoder',
+            globals: {
+                "@googlemaps/google-maps-services-js": 'googleMapsServicesJs'
+            }
         }
     ],
     external: [
         ...Object.keys(pkg.dependencies || {})
     ],
     plugins: [
-        typescript({
-            typescript: require('typescript')
-        }),
         nodePolyfills(),
-        externalGlobals({
-            "@googlemaps/google-maps-services-js": "googleMapsServicesJs"
-        })
+        commonjs()
     ]
 };

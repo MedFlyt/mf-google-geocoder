@@ -1,4 +1,4 @@
-import * as googlemaps from '@googlemaps/google-maps-services-js';
+import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, Status } from '@googlemaps/google-maps-services-js';
 interface Geo {
     lat: number;
     lng: number;
@@ -10,12 +10,12 @@ export interface Options {
     mfAutoFix?: boolean;
 }
 export interface GoogleGeoCodeResponse {
-    address_components: googlemaps.AddressComponent[];
+    address_components: AddressComponent[];
     formatted_address: string;
-    types: googlemaps.AddressType[];
+    types: AddressType[];
     place_id: string;
-    geometry: googlemaps.AddressGeometry;
-    status: googlemaps.Status;
+    geometry: AddressGeometry;
+    status: Status;
 }
 export interface AddressDetails {
     /** geometry.location */
@@ -41,14 +41,14 @@ export interface AddressDetails {
     /** address component with 'subpremise' type */
     address2: string | null;
     /** original google status */
-    status: googlemaps.Status;
+    status: Status;
     /** original google API response */
     googleGeoCodeResponse: GoogleGeoCodeResponse;
 }
 export declare class MissingAddressDetailsError extends Error {
-    missingTypes: (googlemaps.AddressType | googlemaps.GeocodingAddressComponentType)[];
+    missingTypes: (AddressType | GeocodingAddressComponentType)[];
     message: string;
-    constructor(missingTypes: (googlemaps.AddressType | googlemaps.GeocodingAddressComponentType)[], message: string);
+    constructor(missingTypes: (AddressType | GeocodingAddressComponentType)[], message: string);
 }
 export declare const fromGoogleGeoCode: (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options) => Promise<AddressDetails>;
 export declare const fromAddressText: (addressText: string, options: Options) => Promise<AddressDetails>;

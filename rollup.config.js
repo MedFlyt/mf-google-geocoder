@@ -1,14 +1,15 @@
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
-import { terser } from "rollup-plugin-terser";
 import nodePolyfills from 'rollup-plugin-node-polyfills';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 export default {
-    input: 'src/index.ts', // our source file
+    input: 'src/index.ts',
     output: [
         {
             file: "./build/mf-geo-coder.js",
             format: 'iife',
-            name: 'mfGeoCoder' // the global which can be used in a browser
+            name: 'mfGeoCoder'
         }
     ],
     external: [
@@ -16,9 +17,11 @@ export default {
     ],
     plugins: [
         typescript({
-            typescript: require('typescript')
+            typescript: require('typescript'),
+
         }),
-        nodePolyfills(),
-        terser()
+        commonjs(),
+        nodeResolve(),
+        nodePolyfills()
     ]
 };

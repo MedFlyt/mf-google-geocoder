@@ -6,7 +6,6 @@ export default {
     input: 'src/index.ts', // our source file
     output: [
         {
-            globals: { '@googlemaps/google-maps-services-js': 'googleMapsServicesJs' },
             file: "./build/bundle.js",
             format: 'umd',
             name: 'mfGeoCoder' // the global which can be used in a browser

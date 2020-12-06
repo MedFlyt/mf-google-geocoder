@@ -83,6 +83,7 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode) {
         fullAddress: fullAddress,
         address2: address2 !== undefined ? `#${address2}` : null,
         googleGeoCodeResponse: googleGeoCode,
+        status: googleGeoCode.status,
         location: googleGeoCode.geometry.location
     };
 }
@@ -144,14 +145,15 @@ function getGoogleGeoCode(addressText, options) {
                     throw new Error(googleAddressComponents.error_message);
                 }
                 if (googleAddressComponents.results.length === 0) {
-                    throw new Error("Address not found, check validity of address");
+                    throw new Error(google_maps_services_js_1.Status.ZERO_RESULTS);
                 }
                 const result = {
                     address_components: googleAddressComponents.results[0].address_components,
                     formatted_address: googleAddressComponents.results[0].formatted_address,
                     geometry: googleAddressComponents.results[0].geometry,
                     place_id: googleAddressComponents.results[0].place_id,
-                    types: googleAddressComponents.results[0].types
+                    types: googleAddressComponents.results[0].types,
+                    status: googleAddressComponents.status
                 };
                 resolve(result);
             });

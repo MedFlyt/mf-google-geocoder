@@ -1,5 +1,5 @@
 import * as googlemaps from '@googlemaps/google-maps-services-js';
-import { AddressType, GeocodingAddressComponentType } from '@googlemaps/google-maps-services-js';
+import { AddressType, GeocodingAddressComponentType, Status } from '@googlemaps/google-maps-services-js';
 interface Geo {
     lat: number;
     lng: number;
@@ -16,6 +16,7 @@ export interface GoogleGeoCodeResponse {
     types: googlemaps.AddressType[];
     place_id: string;
     geometry: googlemaps.AddressGeometry;
+    status: googlemaps.Status;
 }
 export interface AddressDetails {
     /** geometry.location */
@@ -40,6 +41,8 @@ export interface AddressDetails {
     fullAddress: string;
     /** address component with 'subpremise' type */
     address2: string | null;
+    /** original google status */
+    status: Status;
     /** original google API response */
     googleGeoCodeResponse: GoogleGeoCodeResponse;
 }

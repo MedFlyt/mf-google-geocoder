@@ -1,6 +1,6 @@
 {
   "name": "mf-google-geocoder",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "JS library that uses Google Geocoding API and parses the response into a flat, readable and minimal object.",
   "main": "index.ts",
   "types": "build/index.d.ts",

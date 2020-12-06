@@ -1,5 +1,7 @@
-(function () {
-    'use strict';
+(function (factory) {
+    typeof define === 'function' && define.amd ? define(factory) :
+    factory();
+}((function () { 'use strict';
 
     var __createBinding = (undefined && undefined.__createBinding) || (Object.create ? (function(o, m, k, k2) {
         if (k2 === undefined) k2 = k;
@@ -167,4 +169,4 @@
         });
     }
 
-}());
+})));

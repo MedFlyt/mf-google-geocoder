@@ -7,7 +7,7 @@ export default {
     output: [
         {
             file: "./bundle/mf-geo-coder.js",
-            format: 'iife',
+            format: 'umd',
             name: 'mfGeoCoder'
 
         }

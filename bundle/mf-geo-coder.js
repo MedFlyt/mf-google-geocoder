@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@googlemaps/google-maps-services-js')) :
 	typeof define === 'function' && define.amd ? define(['@googlemaps/google-maps-services-js'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.mfGeoCoder = factory(global.googleMapsServicesJs));
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.mfGeoCoder = factory(global.google_maps_services_js_1));
 }(this, (function (google_maps_services_js_1) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }

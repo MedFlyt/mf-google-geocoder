@@ -9,7 +9,7 @@ export default {
             format: 'umd',
             name: 'mfGeoCoder',
             globals: {
-                "@googlemaps/google-maps-services-js": 'googleMapsServicesJs'
+                "@googlemaps/google-maps-services-js": 'google_maps_services_js_1'
             }
         }
     ],

@@ -1,5 +1,5 @@
 import { fromGoogleGeoCode, MissingAddressDetailsError } from "../src/index";
-import { AddressComponent, AddressGeometry, AddressType } from '@googlemaps/google-maps-services-js';
+import { AddressComponent, AddressGeometry, AddressType, Status } from '@googlemaps/google-maps-services-js';
 import { googleValidResponse, noNeighborhood, nonValidStreet } from "./addresses";
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -11,7 +11,8 @@ test('valid google response', async () => {
     formatted_address: googleValidResponse.results[0].formatted_address,
     geometry: googleValidResponse.results[0].geometry as AddressGeometry,
     place_id: googleValidResponse.results[0].place_id,
-    types: googleValidResponse.results[0].types as AddressType[]
+    types: googleValidResponse.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
   };
 
   const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
@@ -27,6 +28,7 @@ test('valid google response', async () => {
     zipSuffix: '3880',
     fullAddress: '672 Franklin Ave #1FL, Brooklyn, NY 11238, USA',
     address2: '#1FL',
+    status: 'OK',
     googleGeoCodeResponse: googleGeoCode
   });
 });
@@ -37,7 +39,8 @@ test('non valid street', async () => {
     formatted_address: nonValidStreet.nonValid.results[0].formatted_address,
     geometry: nonValidStreet.nonValid.results[0].geometry as AddressGeometry,
     place_id: nonValidStreet.nonValid.results[0].place_id,
-    types: nonValidStreet.nonValid.results[0].types as AddressType[]
+    types: nonValidStreet.nonValid.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
   };
 
   const validGoogleGeoCode = {
@@ -45,7 +48,8 @@ test('non valid street', async () => {
     formatted_address: nonValidStreet.valid.results[0].formatted_address,
     geometry: nonValidStreet.valid.results[0].geometry as AddressGeometry,
     place_id: nonValidStreet.valid.results[0].place_id,
-    types: nonValidStreet.valid.results[0].types as AddressType[]
+    types: nonValidStreet.valid.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
   };
 
   const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true });
@@ -61,6 +65,7 @@ test('non valid street', async () => {
     zipSuffix: null,
     fullAddress: 'Exterior St, The Bronx, NY 10463, USA',
     address2: null,
+    status: 'OK',
     googleGeoCodeResponse: validGoogleGeoCode
   });
 });
@@ -71,7 +76,8 @@ test('no neighborhood and sublocality google response', async () => {
     formatted_address: noNeighborhood.results[0].formatted_address,
     geometry: noNeighborhood.results[0].geometry as AddressGeometry,
     place_id: noNeighborhood.results[0].place_id,
-    types: noNeighborhood.results[0].types as AddressType[]
+    types: noNeighborhood.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
   };
 
   const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
@@ -87,6 +93,7 @@ test('no neighborhood and sublocality google response', async () => {
     zipSuffix: '3310',
     fullAddress: '19 Court St, White Plains, NY 10601, USA',
     address2: null,
+    status: 'OK',
     googleGeoCodeResponse: googleGeoCode
   });
 });
@@ -98,7 +105,8 @@ test('missing required field', async () => {
     formatted_address: googleValidResponse.results[0].formatted_address,
     geometry: googleValidResponse.results[0].geometry as AddressGeometry,
     place_id: googleValidResponse.results[0].place_id,
-    types: googleValidResponse.results[0].types as AddressType[]
+    types: googleValidResponse.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
   };
   const countryIdx = googleGeoCode.address_components.findIndex(component => component.types.includes(AddressType.country));
   googleGeoCode.address_components.splice(countryIdx, 1);
@@ -117,7 +125,8 @@ test('no mf auto fix', async () => {
     formatted_address: nonValidStreet.nonValid.results[0].formatted_address,
     geometry: nonValidStreet.nonValid.results[0].geometry as AddressGeometry,
     place_id: nonValidStreet.nonValid.results[0].place_id,
-    types: nonValidStreet.nonValid.results[0].types as AddressType[]
+    types: nonValidStreet.nonValid.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
   };
 
   try { await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }); }

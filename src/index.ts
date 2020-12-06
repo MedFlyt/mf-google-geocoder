@@ -1,5 +1,5 @@
 import * as googlemaps from '@googlemaps/google-maps-services-js';
-import { AddressType, GeocodingAddressComponentType, PlaceType2 } from '@googlemaps/google-maps-services-js';
+import { AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
 import * as https from "https";
 
 interface Geo {
@@ -20,6 +20,7 @@ export interface GoogleGeoCodeResponse {
     types: googlemaps.AddressType[];
     place_id: string;
     geometry: googlemaps.AddressGeometry;
+    status: googlemaps.Status;
 }
 
 export interface AddressDetails {
@@ -45,6 +46,8 @@ export interface AddressDetails {
     fullAddress: string;
     /** address component with 'subpremise' type */
     address2: string | null;
+    /** original google status */
+    status: Status;
     /** original google API response */
     googleGeoCodeResponse: GoogleGeoCodeResponse;
 }
@@ -116,6 +119,7 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse
         fullAddress: fullAddress,
         address2: address2 !== undefined ? `#${address2}` : null,
         googleGeoCodeResponse: googleGeoCode,
+        status: googleGeoCode.status,
         location: googleGeoCode.geometry.location
     }
 }
@@ -181,14 +185,15 @@ function getGoogleGeoCode(addressText: string, options: Options): Promise<Google
                         throw new Error(googleAddressComponents.error_message);
                     }
                     if (googleAddressComponents.results.length === 0) {
-                        throw new Error("Address not found, check validity of address");
+                        throw new Error(Status.ZERO_RESULTS);
                     }
                     const result: GoogleGeoCodeResponse = {
                         address_components: googleAddressComponents.results[0].address_components,
                         formatted_address: googleAddressComponents.results[0].formatted_address,
                         geometry: googleAddressComponents.results[0].geometry,
                         place_id: googleAddressComponents.results[0].place_id,
-                        types: googleAddressComponents.results[0].types
+                        types: googleAddressComponents.results[0].types,
+                        status: googleAddressComponents.status
                     }
                     resolve(result);
                 });

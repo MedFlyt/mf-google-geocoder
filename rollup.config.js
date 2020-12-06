@@ -6,7 +6,7 @@ export default {
     input: 'src/index.ts', // our source file
     output: [
         {
-            file: "./build/bundle.js",
+            file: "./build/mf-geo-coder.js",
             format: 'umd',
             name: 'mfGeoCoder' // the global which can be used in a browser
         }

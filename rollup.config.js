@@ -7,7 +7,7 @@ export default {
     output: [
         {
             file: "./build/mf-geo-coder.js",
-            format: 'umd',
+            format: 'iife',
             name: 'mfGeoCoder' // the global which can be used in a browser
         }
     ],

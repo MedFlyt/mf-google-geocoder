@@ -29,7 +29,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fromAddressText = exports.fromGoogleGeoCode = exports.MissingAddressDetailsError = void 0;
-const google_maps_services_js_1 = require("@googlemaps/google-maps-services-js");
+const googlemaps = __importStar(require("@googlemaps/google-maps-services-js"));
 const https = __importStar(require("https"));
 class MissingAddressDetailsError extends Error {
     constructor(missingTypes, message) {
@@ -43,33 +43,33 @@ exports.MissingAddressDetailsError = MissingAddressDetailsError;
 function parseGoogleGeoCodeToAddressDetails(googleGeoCode) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     const addressComponents = googleGeoCode.address_components;
-    const country = (_a = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.country) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _a === void 0 ? void 0 : _a.short_name;
-    const state = (_b = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.administrative_area_level_1) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _b === void 0 ? void 0 : _b.short_name;
-    const county = (_c = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.administrative_area_level_2) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _c === void 0 ? void 0 : _c.short_name;
-    const city = (_g = (_e = ((_d = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.neighborhood) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _d === void 0 ? void 0 : _d.short_name)) !== null && _e !== void 0 ? _e : ((_f = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.sublocality) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _f === void 0 ? void 0 : _f.short_name)) !== null && _g !== void 0 ? _g : ((_h = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.locality) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _h === void 0 ? void 0 : _h.short_name);
-    const street = (_j = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.route))) === null || _j === void 0 ? void 0 : _j.short_name;
-    const streetNumber = (_k = addressComponents.find(component => component.types.includes(google_maps_services_js_1.GeocodingAddressComponentType.street_number))) === null || _k === void 0 ? void 0 : _k.short_name;
-    const zip = (_l = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.postal_code))) === null || _l === void 0 ? void 0 : _l.short_name;
-    const zipSuffix = (_m = addressComponents.find(component => component.types.includes(google_maps_services_js_1.PlaceType2.postal_code_suffix))) === null || _m === void 0 ? void 0 : _m.short_name;
-    const address2 = (_o = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.subpremise))) === null || _o === void 0 ? void 0 : _o.short_name;
+    const country = (_a = addressComponents.find(component => component.types.includes(googlemaps.AddressType.country) && component.types.includes(googlemaps.AddressType.political))) === null || _a === void 0 ? void 0 : _a.short_name;
+    const state = (_b = addressComponents.find(component => component.types.includes(googlemaps.AddressType.administrative_area_level_1) && component.types.includes(googlemaps.AddressType.political))) === null || _b === void 0 ? void 0 : _b.short_name;
+    const county = (_c = addressComponents.find(component => component.types.includes(googlemaps.AddressType.administrative_area_level_2) && component.types.includes(googlemaps.AddressType.political))) === null || _c === void 0 ? void 0 : _c.short_name;
+    const city = (_g = (_e = ((_d = addressComponents.find(component => component.types.includes(googlemaps.AddressType.neighborhood) && component.types.includes(googlemaps.AddressType.political))) === null || _d === void 0 ? void 0 : _d.short_name)) !== null && _e !== void 0 ? _e : ((_f = addressComponents.find(component => component.types.includes(googlemaps.AddressType.sublocality) && component.types.includes(googlemaps.AddressType.political))) === null || _f === void 0 ? void 0 : _f.short_name)) !== null && _g !== void 0 ? _g : ((_h = addressComponents.find(component => component.types.includes(googlemaps.AddressType.locality) && component.types.includes(googlemaps.AddressType.political))) === null || _h === void 0 ? void 0 : _h.short_name);
+    const street = (_j = addressComponents.find(component => component.types.includes(googlemaps.AddressType.route))) === null || _j === void 0 ? void 0 : _j.short_name;
+    const streetNumber = (_k = addressComponents.find(component => component.types.includes(googlemaps.GeocodingAddressComponentType.street_number))) === null || _k === void 0 ? void 0 : _k.short_name;
+    const zip = (_l = addressComponents.find(component => component.types.includes(googlemaps.AddressType.postal_code))) === null || _l === void 0 ? void 0 : _l.short_name;
+    const zipSuffix = (_m = addressComponents.find(component => component.types.includes(googlemaps.PlaceType2.postal_code_suffix))) === null || _m === void 0 ? void 0 : _m.short_name;
+    const address2 = (_o = addressComponents.find(component => component.types.includes(googlemaps.AddressType.subpremise))) === null || _o === void 0 ? void 0 : _o.short_name;
     const fullAddress = googleGeoCode.formatted_address;
     if (country === undefined) {
-        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.country, google_maps_services_js_1.AddressType.political], `Missing  ${google_maps_services_js_1.AddressType.political} and ${google_maps_services_js_1.AddressType.country} types in address components`);
+        throw new MissingAddressDetailsError([googlemaps.AddressType.country, googlemaps.AddressType.political], `Missing  ${googlemaps.AddressType.political} and ${googlemaps.AddressType.country} types in address components`);
     }
     if (state === undefined) {
-        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.administrative_area_level_1, google_maps_services_js_1.AddressType.political], `Missing ${google_maps_services_js_1.AddressType.political} and  ${google_maps_services_js_1.AddressType.administrative_area_level_1} types in address components`);
+        throw new MissingAddressDetailsError([googlemaps.AddressType.administrative_area_level_1, googlemaps.AddressType.political], `Missing ${googlemaps.AddressType.political} and  ${googlemaps.AddressType.administrative_area_level_1} types in address components`);
     }
     if (county === undefined) {
-        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.administrative_area_level_2, google_maps_services_js_1.AddressType.political], `Missing political ${google_maps_services_js_1.AddressType.political} and  ${google_maps_services_js_1.AddressType.administrative_area_level_2} types in address components`);
+        throw new MissingAddressDetailsError([googlemaps.AddressType.administrative_area_level_2, googlemaps.AddressType.political], `Missing political ${googlemaps.AddressType.political} and  ${googlemaps.AddressType.administrative_area_level_2} types in address components`);
     }
     if (city === undefined) {
-        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.neighborhood, google_maps_services_js_1.AddressType.political, google_maps_services_js_1.AddressType.sublocality, google_maps_services_js_1.AddressType.locality], `Missing ${google_maps_services_js_1.AddressType.locality}, ${google_maps_services_js_1.AddressType.sublocality}, ${google_maps_services_js_1.AddressType.neighborhood} and ${google_maps_services_js_1.AddressType.sublocality}types in address components`);
+        throw new MissingAddressDetailsError([googlemaps.AddressType.neighborhood, googlemaps.AddressType.political, googlemaps.AddressType.sublocality, googlemaps.AddressType.locality], `Missing ${googlemaps.AddressType.locality}, ${googlemaps.AddressType.sublocality}, ${googlemaps.AddressType.neighborhood} and ${googlemaps.AddressType.sublocality}types in address components`);
     }
     if (street === undefined) {
-        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.route], `Missing ${google_maps_services_js_1.AddressType.route} type in address components`);
+        throw new MissingAddressDetailsError([googlemaps.AddressType.route], `Missing ${googlemaps.AddressType.route} type in address components`);
     }
     if (zip === undefined) {
-        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.postal_code], `Missing ${google_maps_services_js_1.AddressType.postal_code} type in address components`);
+        throw new MissingAddressDetailsError([googlemaps.AddressType.postal_code], `Missing ${googlemaps.AddressType.postal_code} type in address components`);
     }
     return {
         streetNumber: streetNumber === undefined ? null : streetNumber,
@@ -93,7 +93,7 @@ const fromGoogleGeoCode = (googleGeoCodeResponse, options) => __awaiter(void 0, 
     }
     catch (e) {
         if (e.name === 'MissingAddressDetailsError') {
-            if (e.missingTypes.includes(google_maps_services_js_1.AddressType.administrative_area_level_2) && (options.mfAutoFix === undefined || options.mfAutoFix)) {
+            if (e.missingTypes.includes(googlemaps.AddressType.administrative_area_level_2) && (options.mfAutoFix === undefined || options.mfAutoFix)) {
                 const streetNumberRegex = /^[0-9]+\s|^[0-9]+-[0-9]+\s/;
                 const modifiedAddressText = googleGeoCodeResponse.formatted_address.replace(streetNumberRegex, '');
                 const newGoogleGeoCoderResponse = yield getGoogleGeoCode(modifiedAddressText, options);
@@ -145,7 +145,7 @@ function getGoogleGeoCode(addressText, options) {
                     throw new Error(googleAddressComponents.error_message);
                 }
                 if (googleAddressComponents.results.length === 0) {
-                    throw new Error(google_maps_services_js_1.Status.ZERO_RESULTS);
+                    throw new Error(googlemaps.Status.ZERO_RESULTS);
                 }
                 const result = {
                     address_components: googleAddressComponents.results[0].address_components,

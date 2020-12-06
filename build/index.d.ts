@@ -1,5 +1,4 @@
 import * as googlemaps from '@googlemaps/google-maps-services-js';
-import { AddressType, GeocodingAddressComponentType, Status } from '@googlemaps/google-maps-services-js';
 interface Geo {
     lat: number;
     lng: number;
@@ -42,14 +41,14 @@ export interface AddressDetails {
     /** address component with 'subpremise' type */
     address2: string | null;
     /** original google status */
-    status: Status;
+    status: googlemaps.Status;
     /** original google API response */
     googleGeoCodeResponse: GoogleGeoCodeResponse;
 }
 export declare class MissingAddressDetailsError extends Error {
-    missingTypes: (AddressType | GeocodingAddressComponentType)[];
+    missingTypes: (googlemaps.AddressType | googlemaps.GeocodingAddressComponentType)[];
     message: string;
-    constructor(missingTypes: (AddressType | GeocodingAddressComponentType)[], message: string);
+    constructor(missingTypes: (googlemaps.AddressType | googlemaps.GeocodingAddressComponentType)[], message: string);
 }
 export declare const fromGoogleGeoCode: (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options) => Promise<AddressDetails>;
 export declare const fromAddressText: (addressText: string, options: Options) => Promise<AddressDetails>;

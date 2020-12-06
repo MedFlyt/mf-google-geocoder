@@ -1,4 +1,4 @@
-import * as https from "https";
+import axios from "axios";
 import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
 
 interface Geo {
@@ -153,54 +153,30 @@ export const fromAddressText = async (addressText: string, options: Options): Pr
     return fromGoogleGeoCode(googleResponse, options);
 }
 
-function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {
-    return new Promise<GoogleGeoCodeResponse>((resolve, reject) => {
-        const req = https.request(
-            {
-                host: "maps.googleapis.com",
-                hostname: "maps.googleapis.com",
-                port: 443,
-                method: "GET",
-                path:
-                    "/maps/api/geocode/json?address=" +
-                    encodeURIComponent(addressText) + '&key=' +
-                    options.apiKey
-            },
-            (response) => {
-                if (
-                    response.statusCode === undefined ||
-                    response.statusCode < 200 ||
-                    response.statusCode > 300
-                ) {
-                    reject(new Error(`Status code error: ${response.statusCode}`));
-                }
-                let body = "";
-                response.on("data", (d) => {
-                    body += d;
-                });
-                response.on("end", () => {
-                    const googleAddressComponents = JSON.parse(body);
-                    if (googleAddressComponents.error_message !== undefined) {
-                        throw new Error(googleAddressComponents.error_message);
-                    }
-                    if (googleAddressComponents.results.length === 0) {
-                        throw new Error(Status.ZERO_RESULTS);
-                    }
-                    const result: GoogleGeoCodeResponse = {
-                        address_components: googleAddressComponents.results[0].address_components,
-                        formatted_address: googleAddressComponents.results[0].formatted_address,
-                        geometry: googleAddressComponents.results[0].geometry,
-                        place_id: googleAddressComponents.results[0].place_id,
-                        types: googleAddressComponents.results[0].types,
-                        status: googleAddressComponents.status
-                    }
-                    resolve(result);
-                });
-            }
-        );
-        req.on("error", (err) => {
-            reject(err);
-        });
-        req.end("", "utf8");
-    });
+async function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {
+    const response = await axios.get(
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" + "/maps/api/geocode/json?address=" +
+        encodeURIComponent(addressText) + '&key=' + options.apiKey)
+    if (
+        response.status === undefined ||
+        response.status < 200 ||
+        response.status > 300
+    ) {
+        throw new Error(`Status code error: ${response.status}`);
+    }
+    const googleAddressComponents = response.data;
+    if (googleAddressComponents.error_message !== undefined) {
+        throw new Error(googleAddressComponents.error_message);
+    }
+    if (googleAddressComponents.results.length === 0) {
+        throw new Error(Status.ZERO_RESULTS);
+    }
+    return {
+        address_components: googleAddressComponents.results[0].address_components,
+        formatted_address: googleAddressComponents.results[0].formatted_address,
+        geometry: googleAddressComponents.results[0].geometry,
+        place_id: googleAddressComponents.results[0].place_id,
+        types: googleAddressComponents.results[0].types,
+        status: googleAddressComponents.status
+    }
 }

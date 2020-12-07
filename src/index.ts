@@ -1,4 +1,4 @@
-import axios from "axios";
+import Axios from "axios";
 import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
 
 interface Geo {
@@ -154,11 +154,10 @@ export const fromAddressText = async (addressText: string, options: Options): Pr
 }
 
 async function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {
-    const response = await axios.get(
+    const response = await Axios.get(
         "https://maps.googleapis.com/maps/api/geocode/json?address=" + "/maps/api/geocode/json?address=" +
         encodeURIComponent(addressText) + '&key=' + options.apiKey)
     if (
-        response.status === undefined ||
         response.status < 200 ||
         response.status > 300
     ) {

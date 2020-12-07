@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -27,9 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fromAddressText = exports.fromGoogleGeoCode = exports.MissingAddressDetailsError = void 0;
-const https = __importStar(require("https"));
+const axios_1 = __importDefault(require("axios"));
 const google_maps_services_js_1 = require("@googlemaps/google-maps-services-js");
 class MissingAddressDetailsError extends Error {
     constructor(missingTypes, message) {
@@ -120,47 +104,27 @@ const fromAddressText = (addressText, options) => __awaiter(void 0, void 0, void
 });
 exports.fromAddressText = fromAddressText;
 function getGoogleGeoCode(addressText, options) {
-    return new Promise((resolve, reject) => {
-        const req = https.request({
-            host: "maps.googleapis.com",
-            hostname: "maps.googleapis.com",
-            port: 443,
-            method: "GET",
-            path: "/maps/api/geocode/json?address=" +
-                encodeURIComponent(addressText) + '&key=' +
-                options.apiKey
-        }, (response) => {
-            if (response.statusCode === undefined ||
-                response.statusCode < 200 ||
-                response.statusCode > 300) {
-                reject(new Error(`Status code error: ${response.statusCode}`));
-            }
-            let body = "";
-            response.on("data", (d) => {
-                body += d;
-            });
-            response.on("end", () => {
-                const googleAddressComponents = JSON.parse(body);
-                if (googleAddressComponents.error_message !== undefined) {
-                    throw new Error(googleAddressComponents.error_message);
-                }
-                if (googleAddressComponents.results.length === 0) {
-                    throw new Error(google_maps_services_js_1.Status.ZERO_RESULTS);
-                }
-                const result = {
-                    address_components: googleAddressComponents.results[0].address_components,
-                    formatted_address: googleAddressComponents.results[0].formatted_address,
-                    geometry: googleAddressComponents.results[0].geometry,
-                    place_id: googleAddressComponents.results[0].place_id,
-                    types: googleAddressComponents.results[0].types,
-                    status: googleAddressComponents.status
-                };
-                resolve(result);
-            });
-        });
-        req.on("error", (err) => {
-            reject(err);
-        });
-        req.end("", "utf8");
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield axios_1.default.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + "/maps/api/geocode/json?address=" +
+            encodeURIComponent(addressText) + '&key=' + options.apiKey);
+        if (response.status < 200 ||
+            response.status > 300) {
+            throw new Error(`Status code error: ${response.status}`);
+        }
+        const googleAddressComponents = response.data;
+        if (googleAddressComponents.error_message !== undefined) {
+            throw new Error(googleAddressComponents.error_message);
+        }
+        if (googleAddressComponents.results.length === 0) {
+            throw new Error(google_maps_services_js_1.Status.ZERO_RESULTS);
+        }
+        return {
+            address_components: googleAddressComponents.results[0].address_components,
+            formatted_address: googleAddressComponents.results[0].formatted_address,
+            geometry: googleAddressComponents.results[0].geometry,
+            place_id: googleAddressComponents.results[0].place_id,
+            types: googleAddressComponents.results[0].types,
+            status: googleAddressComponents.status
+        };
     });
 }

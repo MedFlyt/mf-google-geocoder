@@ -15,7 +15,24 @@ JS library that uses Google Geocoding API (https only) and parses the response i
         }
     }
 ```
-## Returned Value
+
+## Functions and Interfaces
+
+### From address text
+Gets text and returns ```AddressDetails``` interface and returns ```AddressDetails``` interface
+via
+```javascript
+function fromAddressText(addressText: string, options: Options)
+```
+
+### From Google Geocoder response
+Gets ```GoogleGeoCodeResponse``` and returns ```AddressDetails``` interface
+via
+```javascript
+function fromGoogleGeoCode(googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options)
+```
+
+### Returned Value
 ```javascript
 interface AddressDetails {
     /** geometry.location */
@@ -44,39 +61,14 @@ interface AddressDetails {
     googleGeoCodeResponse: GoogleGeoCodeResponse;
 }
 ```
-### From address text
-Gets text and returns ```AddressDetails``` interface and returns ```AddressDetails``` interface
-via
-```javascript
-function fromAddressText(addressText: string, options: Options)
-```
 
-### From Google Geocoder response
-Gets ```GoogleGeoCodeResponse``` and returns ```AddressDetails``` interface
-via
-```javascript
-function fromGoogleGeoCode(googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options)
-```
-
-##### ```GoogleGeoCodeResponse```:
-
-```javascript
-interface GoogleGeoCodeResponse {
-    address_components: googlemaps.AddressComponent[];
-    formatted_address: string;
-    types: googlemaps.AddressType[];
-    place_id: string;
-    geometry: googlemaps.AddressGeometry;
-}
-```
-
-##### ```MissingAddressDetailsError```:
+### ```MissingAddressDetailsError```:
 Throws ```MissingAddressDetailsError``` with ```missingTypes: (AddressType | GeocodingAddressComponentType)[]```
 if one of the required fields are missing.
 
 
 ### options
-```json
+```javascript
 interface Options {
     /** google API key */
     apiKey: string,

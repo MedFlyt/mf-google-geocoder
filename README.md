@@ -56,6 +56,11 @@ interface GoogleGeoCodeResponse {
 }
 ```
 
+##### ```MissingAddressDetailsError```:
+Throws ```MissingAddressDetailsError``` with ```missingTypes: (AddressType | GeocodingAddressComponentType)[]```
+if one of the required fields are missing.
+
+
 ### options
 ```json
 interface Options {

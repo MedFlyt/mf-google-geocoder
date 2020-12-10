@@ -1,7 +1,21 @@
 # mf-google-geocoder
 JS library that uses Google Geocoding API (https only) and parses the response into a flat, readable and minimal object.
 
-## Returned value
+## Usage Example
+ ```javascript
+ const address = '672 Franklin Ave #1FL, Brooklyn, NY 11238, USA';
+    try {
+        const result = await fromAddressText(address, { apiKey, mfAutoFix: true });
+        console.log(result.city)
+        console.log(result.location)
+        console.log(result.zip)
+    } catch (e) {
+        if (e.name === 'MissingAddressDetailsError')  { // or check if instanceof
+            console.log(e.missingTypes);
+        }
+    }
+```
+## Returned Value
 ```javascript
 interface AddressDetails {
     /** geometry.location */

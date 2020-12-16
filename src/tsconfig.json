@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "ES5",
         "module": "commonjs",
         "lib": [
             "es6",
             "dom"
         ],
         "allowJs": true,
-        "outDir": "../build",
+        "outDir": "../bundle",
         "strict": true,
         "noImplicitAny": true,
         "esModuleInterop": true,

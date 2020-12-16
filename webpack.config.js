@@ -20,7 +20,6 @@ module.exports = {
         filename: 'md-geo-coder.js',
         path: path.resolve(__dirname, './bundle'),
         libraryTarget: 'umd',
-        globalObject: 'this',
-        umdNamedDefine: true
+        globalObject: 'this'
     },
 };

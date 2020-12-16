@@ -17,10 +17,10 @@ module.exports = {
     entry: './src/index.ts',
     output: {
         library: 'mfGeoCoder',
-        filename: 'md-geo-coder.js',
+        filename: 'mf-geo-coder.js',
         path: path.resolve(__dirname, './bundle'),
         libraryTarget: 'umd',
         globalObject: 'this',
         umdNamedDefine: true
-    },
+    }
 };

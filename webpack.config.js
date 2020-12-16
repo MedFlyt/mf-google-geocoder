@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    target: 'web',
+    target: ['web', 'es5'],
     module: {
         rules: [
             {

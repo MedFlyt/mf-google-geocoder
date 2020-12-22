@@ -155,7 +155,7 @@ export const fromAddressText = async (addressText: string, options: Options): Pr
 
 async function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {
     const response = await Axios.get(
-        "https://maps.googleapis.com/maps/api/geocode/json?address=" + "/maps/api/geocode/json?address=" +
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" +
         encodeURIComponent(addressText) + '&key=' + options.apiKey)
     if (
         response.status < 200 ||

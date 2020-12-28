@@ -79,7 +79,7 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode, requiredFields) {
 }
 const fromGoogleGeoCode = (googleGeoCodeResponse, options, requiredFields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse);
+        return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse, requiredFields);
     }
     catch (e) {
         if (e.name === 'MissingAddressDetailsError') {

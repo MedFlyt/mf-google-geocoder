@@ -15,7 +15,7 @@ test('valid google response', async () => {
     status: googleValidResponse.status as Status
   };
 
-  const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
+  const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
   expect(result).toStrictEqual({
     location: { lat: 40.6754925, lng: -73.9564748 },
     country: 'US',
@@ -52,7 +52,7 @@ test('non valid street', async () => {
     status: googleValidResponse.status as Status
   };
 
-  const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true });
+  const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
   expect(result).toStrictEqual({
     location: { lat: 40.8751173, lng: -73.90615939999999 },
     country: 'US',
@@ -70,6 +70,34 @@ test('non valid street', async () => {
   });
 });
 
+test('non valid street with nullable fields', async () => {
+  const nonValidGoogleGeoCode = {
+    address_components: nonValidStreet.nonValid.results[0].address_components as AddressComponent[],
+    formatted_address: nonValidStreet.nonValid.results[0].formatted_address,
+    geometry: nonValidStreet.nonValid.results[0].geometry as AddressGeometry,
+    place_id: nonValidStreet.nonValid.results[0].place_id,
+    types: nonValidStreet.nonValid.results[0].types as AddressType[],
+    status: googleValidResponse.status as Status
+  };
+
+  const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }, []);
+  expect(result).toStrictEqual({
+    location: { lat: 40.8739303, lng: -73.9069078 },
+    country: 'US',
+    state: 'NY',
+    county: null,
+    city: 'The Bronx',
+    street: 'Exterior St',
+    streetNumber: "2811",
+    zip: '10463',
+    zipSuffix: null,
+    fullAddress: '2811 Exterior St, The Bronx, NY 10463, USA',
+    address2: null,
+    status: 'OK',
+    googleGeoCodeResponse: nonValidGoogleGeoCode
+  });
+});
+
 test('no neighborhood and sublocality google response', async () => {
   const googleGeoCode = {
     address_components: noNeighborhood.results[0].address_components as AddressComponent[],
@@ -80,7 +108,7 @@ test('no neighborhood and sublocality google response', async () => {
     status: googleValidResponse.status as Status
   };
 
-  const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true });
+  const result = await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
   expect(result).toStrictEqual({
     location: { lat: 41.0320206, lng: -73.76735309999999 },
     country: 'US',
@@ -98,7 +126,6 @@ test('no neighborhood and sublocality google response', async () => {
   });
 });
 
-
 test('missing required field', async () => {
   const googleGeoCode = {
     address_components: googleValidResponse.results[0].address_components as AddressComponent[],
@@ -111,7 +138,7 @@ test('missing required field', async () => {
   const countryIdx = googleGeoCode.address_components.findIndex(component => component.types.includes(AddressType.country));
   googleGeoCode.address_components.splice(countryIdx, 1);
 
-  try { await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true }); }
+  try { await fromGoogleGeoCode(googleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']); }
   catch (e) {
     if (e.name === 'MissingAddressDetailsError') {
       expect((e as MissingAddressDetailsError).missingTypes.includes(AddressType.country)).toBe(true);
@@ -129,7 +156,7 @@ test('no mf auto fix', async () => {
     status: googleValidResponse.status as Status
   };
 
-  try { await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }); }
+  try { await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']); }
   catch (e) {
     if (e.name === 'MissingAddressDetailsError') {
       expect((e as MissingAddressDetailsError).missingTypes.includes(AddressType.administrative_area_level_2)).toBe(true);

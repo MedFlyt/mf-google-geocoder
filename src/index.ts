@@ -26,19 +26,19 @@ export interface AddressDetails {
     /** geometry.location */
     location: Geo;
     /** address component with 'country' and 'political' types */
-    country: string;
+    country: string | null;
     /** address component with 'administrative_area_level_1' and 'political' types */
-    state: string;
+    state: string | null;
     /** address component with 'administrative_area_level_2' and 'political' types */
-    county: string;
+    county: string | null;
     /** address component with 'neighborhood \ sublocality \ locality' and 'political' types */
-    city: string;
+    city: string | null;
     /** address component with 'route' type */
-    street: string;
+    street: string | null;
     /** address component with 'street_number' type */
     streetNumber: string | null;
     /** address component with 'postal_code' type */
-    zip: string;
+    zip: string | null;
     /** address component with 'postal_code_suffix' type */
     zipSuffix: string | null;
     /** formatted_address */
@@ -52,13 +52,13 @@ export interface AddressDetails {
 }
 
 export class MissingAddressDetailsError extends Error {
-    constructor(public missingTypes: (AddressType | GeocodingAddressComponentType)[], public message: string) {
+    constructor(public missingTypes: (AddressType | GeocodingAddressComponentType | PlaceType2)[], public message: string) {
         super(message);
         this.name = 'MissingAddressDetailsError';
     }
 }
 
-function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse): AddressDetails {
+function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse, requiredFields?: string[]): AddressDetails {
     const addressComponents = googleGeoCode.address_components;
     const country: string | undefined =
         addressComponents.find(
@@ -87,45 +87,52 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse
         component => component.types.includes(AddressType.subpremise))?.short_name;
     const fullAddress: string = googleGeoCode.formatted_address;
 
-    if (country === undefined) {
+    if (country === undefined && requiredFields !== undefined && requiredFields.includes('country')) {
         throw new MissingAddressDetailsError([AddressType.country, AddressType.political], `Missing  ${AddressType.political} and ${AddressType.country} types in address components`)
     }
-    if (state === undefined) {
+    if (state === undefined && requiredFields !== undefined && requiredFields.includes('state')) {
         throw new MissingAddressDetailsError([AddressType.administrative_area_level_1, AddressType.political], `Missing ${AddressType.political} and  ${AddressType.administrative_area_level_1} types in address components`)
     }
-    if (county === undefined) {
+    if (county === undefined && requiredFields !== undefined && requiredFields.includes('county')) {
         throw new MissingAddressDetailsError([AddressType.administrative_area_level_2, AddressType.political], `Missing political ${AddressType.political} and  ${AddressType.administrative_area_level_2} types in address components`)
     }
-    if (city === undefined) {
+    if (city === undefined && requiredFields !== undefined && requiredFields.includes('city')) {
         throw new MissingAddressDetailsError([AddressType.neighborhood, AddressType.political, AddressType.sublocality, AddressType.locality], `Missing ${AddressType.locality}, ${AddressType.sublocality}, ${AddressType.neighborhood} and ${AddressType.sublocality}types in address components`)
     }
-    if (street === undefined) {
+    if (street === undefined && requiredFields !== undefined && requiredFields.includes('street')) {
         throw new MissingAddressDetailsError([AddressType.route], `Missing ${AddressType.route} type in address components`)
     }
-    if (zip === undefined) {
+    if (zip === undefined && requiredFields !== undefined && requiredFields.includes('zip')) {
         throw new MissingAddressDetailsError([AddressType.postal_code], `Missing ${AddressType.postal_code} type in address components`)
     }
+    if (zipSuffix === undefined && requiredFields !== undefined && requiredFields.includes('zipSuffix')) {
+        throw new MissingAddressDetailsError([PlaceType2.postal_code_suffix], `Missing ${PlaceType2.postal_code_suffix} type in address components`)
+    }
+    if (address2 === undefined && requiredFields !== undefined && requiredFields.includes('address2')) {
+        throw new MissingAddressDetailsError([AddressType.subpremise], `Missing ${AddressType.subpremise} type in address components`)
+    }
+
 
     return {
         streetNumber: streetNumber === undefined ? null : streetNumber,
-        street: street,
-        city: city,
-        county: county,
-        state: state,
-        country: country,
-        zip: zip,
+        street: street === undefined ? null : street,
+        city: city === undefined ? null : city,
+        county: county === undefined ? null : county,
+        state: state === undefined ? null : state,
+        country: country === undefined ? null : country,
+        zip: zip === undefined ? null : zip,
         zipSuffix: zipSuffix === undefined ? null : zipSuffix,
-        fullAddress: fullAddress,
         address2: address2 !== undefined ? `#${address2}` : null,
         googleGeoCodeResponse: googleGeoCode,
+        fullAddress: fullAddress,
         status: googleGeoCode.status,
         location: googleGeoCode.geometry.location
     }
 }
 
-export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options): Promise<AddressDetails> => {
+export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options, requiredFields?: string[]): Promise<AddressDetails> => {
     try {
-        return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse);
+        return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse, requiredFields);
     }
     catch (e) {
         if (e.name === 'MissingAddressDetailsError') {
@@ -133,7 +140,7 @@ export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResp
                 const streetNumberRegex = /^[0-9]+\s|^[0-9]+-[0-9]+\s/;
                 const modifiedAddressText = googleGeoCodeResponse.formatted_address.replace(streetNumberRegex, '');
                 const newGoogleGeoCoderResponse = await getGoogleGeoCode(modifiedAddressText, options);
-                return parseGoogleGeoCodeToAddressDetails(newGoogleGeoCoderResponse);
+                return parseGoogleGeoCodeToAddressDetails(newGoogleGeoCoderResponse, requiredFields);
             } else {
                 throw e;
             }
@@ -143,19 +150,19 @@ export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResp
     }
 }
 
-export const fromAddressText = async (addressText: string, options: Options): Promise<AddressDetails> => {
+export const fromAddressText = async (addressText: string, options: Options, requiredFields?: string[]): Promise<AddressDetails> => {
     let modifiedAddressText = addressText
     const streetNumbersRegex = /^([0-9]+)(\s)([0-9]+\s)/;
     if (options.mfAutoFix === undefined || options.mfAutoFix) {
         modifiedAddressText = addressText.replace(streetNumbersRegex, "$1-$3");
     }
     const googleResponse = await getGoogleGeoCode(modifiedAddressText, options);
-    return fromGoogleGeoCode(googleResponse, options);
+    return fromGoogleGeoCode(googleResponse, options, requiredFields);
 }
 
 async function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {
     const response = await Axios.get(
-        "https://maps.googleapis.com/maps/api/geocode/json?address=" + "/maps/api/geocode/json?address=" +
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" +
         encodeURIComponent(addressText) + '&key=' + options.apiKey)
     if (
         response.status < 200 ||

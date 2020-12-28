@@ -1,4 +1,4 @@
-import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, Status } from '@googlemaps/google-maps-services-js';
+import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
 interface Geo {
     lat: number;
     lng: number;
@@ -21,19 +21,19 @@ export interface AddressDetails {
     /** geometry.location */
     location: Geo;
     /** address component with 'country' and 'political' types */
-    country: string;
+    country: string | null;
     /** address component with 'administrative_area_level_1' and 'political' types */
-    state: string;
+    state: string | null;
     /** address component with 'administrative_area_level_2' and 'political' types */
-    county: string;
+    county: string | null;
     /** address component with 'neighborhood \ sublocality \ locality' and 'political' types */
-    city: string;
+    city: string | null;
     /** address component with 'route' type */
-    street: string;
+    street: string | null;
     /** address component with 'street_number' type */
     streetNumber: string | null;
     /** address component with 'postal_code' type */
-    zip: string;
+    zip: string | null;
     /** address component with 'postal_code_suffix' type */
     zipSuffix: string | null;
     /** formatted_address */
@@ -46,10 +46,10 @@ export interface AddressDetails {
     googleGeoCodeResponse: GoogleGeoCodeResponse;
 }
 export declare class MissingAddressDetailsError extends Error {
-    missingTypes: (AddressType | GeocodingAddressComponentType)[];
+    missingTypes: (AddressType | GeocodingAddressComponentType | PlaceType2)[];
     message: string;
-    constructor(missingTypes: (AddressType | GeocodingAddressComponentType)[], message: string);
+    constructor(missingTypes: (AddressType | GeocodingAddressComponentType | PlaceType2)[], message: string);
 }
-export declare const fromGoogleGeoCode: (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options) => Promise<AddressDetails>;
-export declare const fromAddressText: (addressText: string, options: Options) => Promise<AddressDetails>;
+export declare const fromGoogleGeoCode: (googleGeoCodeResponse: GoogleGeoCodeResponse, options: Options, requiredFields?: string[] | undefined) => Promise<AddressDetails>;
+export declare const fromAddressText: (addressText: string, options: Options, requiredFields?: string[] | undefined) => Promise<AddressDetails>;
 export {};

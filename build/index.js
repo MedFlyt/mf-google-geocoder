@@ -24,7 +24,7 @@ class MissingAddressDetailsError extends Error {
     }
 }
 exports.MissingAddressDetailsError = MissingAddressDetailsError;
-function parseGoogleGeoCodeToAddressDetails(googleGeoCode) {
+function parseGoogleGeoCodeToAddressDetails(googleGeoCode, requiredFields) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     const addressComponents = googleGeoCode.address_components;
     const country = (_a = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.country) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _a === void 0 ? void 0 : _a.short_name;
@@ -37,41 +37,47 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode) {
     const zipSuffix = (_m = addressComponents.find(component => component.types.includes(google_maps_services_js_1.PlaceType2.postal_code_suffix))) === null || _m === void 0 ? void 0 : _m.short_name;
     const address2 = (_o = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.subpremise))) === null || _o === void 0 ? void 0 : _o.short_name;
     const fullAddress = googleGeoCode.formatted_address;
-    if (country === undefined) {
+    if (country === undefined && requiredFields !== undefined && requiredFields.includes('country')) {
         throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.country, google_maps_services_js_1.AddressType.political], `Missing  ${google_maps_services_js_1.AddressType.political} and ${google_maps_services_js_1.AddressType.country} types in address components`);
     }
-    if (state === undefined) {
+    if (state === undefined && requiredFields !== undefined && requiredFields.includes('state')) {
         throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.administrative_area_level_1, google_maps_services_js_1.AddressType.political], `Missing ${google_maps_services_js_1.AddressType.political} and  ${google_maps_services_js_1.AddressType.administrative_area_level_1} types in address components`);
     }
-    if (county === undefined) {
+    if (county === undefined && requiredFields !== undefined && requiredFields.includes('county')) {
         throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.administrative_area_level_2, google_maps_services_js_1.AddressType.political], `Missing political ${google_maps_services_js_1.AddressType.political} and  ${google_maps_services_js_1.AddressType.administrative_area_level_2} types in address components`);
     }
-    if (city === undefined) {
+    if (city === undefined && requiredFields !== undefined && requiredFields.includes('city')) {
         throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.neighborhood, google_maps_services_js_1.AddressType.political, google_maps_services_js_1.AddressType.sublocality, google_maps_services_js_1.AddressType.locality], `Missing ${google_maps_services_js_1.AddressType.locality}, ${google_maps_services_js_1.AddressType.sublocality}, ${google_maps_services_js_1.AddressType.neighborhood} and ${google_maps_services_js_1.AddressType.sublocality}types in address components`);
     }
-    if (street === undefined) {
+    if (street === undefined && requiredFields !== undefined && requiredFields.includes('street')) {
         throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.route], `Missing ${google_maps_services_js_1.AddressType.route} type in address components`);
     }
-    if (zip === undefined) {
+    if (zip === undefined && requiredFields !== undefined && requiredFields.includes('zip')) {
         throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.postal_code], `Missing ${google_maps_services_js_1.AddressType.postal_code} type in address components`);
+    }
+    if (zipSuffix === undefined && requiredFields !== undefined && requiredFields.includes('zipSuffix')) {
+        throw new MissingAddressDetailsError([google_maps_services_js_1.PlaceType2.postal_code_suffix], `Missing ${google_maps_services_js_1.PlaceType2.postal_code_suffix} type in address components`);
+    }
+    if (address2 === undefined && requiredFields !== undefined && requiredFields.includes('address2')) {
+        throw new MissingAddressDetailsError([google_maps_services_js_1.AddressType.subpremise], `Missing ${google_maps_services_js_1.AddressType.subpremise} type in address components`);
     }
     return {
         streetNumber: streetNumber === undefined ? null : streetNumber,
-        street: street,
-        city: city,
-        county: county,
-        state: state,
-        country: country,
-        zip: zip,
+        street: street === undefined ? null : street,
+        city: city === undefined ? null : city,
+        county: county === undefined ? null : county,
+        state: state === undefined ? null : state,
+        country: country === undefined ? null : country,
+        zip: zip === undefined ? null : zip,
         zipSuffix: zipSuffix === undefined ? null : zipSuffix,
-        fullAddress: fullAddress,
         address2: address2 !== undefined ? `#${address2}` : null,
         googleGeoCodeResponse: googleGeoCode,
+        fullAddress: fullAddress,
         status: googleGeoCode.status,
         location: googleGeoCode.geometry.location
     };
 }
-const fromGoogleGeoCode = (googleGeoCodeResponse, options) => __awaiter(void 0, void 0, void 0, function* () {
+const fromGoogleGeoCode = (googleGeoCodeResponse, options, requiredFields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse);
     }
@@ -81,7 +87,7 @@ const fromGoogleGeoCode = (googleGeoCodeResponse, options) => __awaiter(void 0, 
                 const streetNumberRegex = /^[0-9]+\s|^[0-9]+-[0-9]+\s/;
                 const modifiedAddressText = googleGeoCodeResponse.formatted_address.replace(streetNumberRegex, '');
                 const newGoogleGeoCoderResponse = yield getGoogleGeoCode(modifiedAddressText, options);
-                return parseGoogleGeoCodeToAddressDetails(newGoogleGeoCoderResponse);
+                return parseGoogleGeoCodeToAddressDetails(newGoogleGeoCoderResponse, requiredFields);
             }
             else {
                 throw e;
@@ -93,14 +99,14 @@ const fromGoogleGeoCode = (googleGeoCodeResponse, options) => __awaiter(void 0, 
     }
 });
 exports.fromGoogleGeoCode = fromGoogleGeoCode;
-const fromAddressText = (addressText, options) => __awaiter(void 0, void 0, void 0, function* () {
+const fromAddressText = (addressText, options, requiredFields) => __awaiter(void 0, void 0, void 0, function* () {
     let modifiedAddressText = addressText;
     const streetNumbersRegex = /^([0-9]+)(\s)([0-9]+\s)/;
     if (options.mfAutoFix === undefined || options.mfAutoFix) {
         modifiedAddressText = addressText.replace(streetNumbersRegex, "$1-$3");
     }
     const googleResponse = yield getGoogleGeoCode(modifiedAddressText, options);
-    return exports.fromGoogleGeoCode(googleResponse, options);
+    return exports.fromGoogleGeoCode(googleResponse, options, requiredFields);
 });
 exports.fromAddressText = fromAddressText;
 function getGoogleGeoCode(addressText, options) {

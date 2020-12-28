@@ -111,7 +111,7 @@ const fromAddressText = (addressText, options, requiredFields) => __awaiter(void
 exports.fromAddressText = fromAddressText;
 function getGoogleGeoCode(addressText, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield axios_1.default.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + "/maps/api/geocode/json?address=" +
+        const response = yield axios_1.default.get("https://maps.googleapis.com/maps/api/geocode/json?address=" +
             encodeURIComponent(addressText) + '&key=' + options.apiKey);
         if (response.status < 200 ||
             response.status > 300) {

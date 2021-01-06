@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
+import { independentCities } from "./independentCities";
 
 interface Geo {
     lat: number;
@@ -58,6 +59,30 @@ export class MissingAddressDetailsError extends Error {
     }
 }
 
+function extractCounty(addressComponents: AddressComponent[], state: string | undefined): string | undefined {
+    let county: string | undefined = addressComponents.find(
+        component => component.types.includes(AddressType.administrative_area_level_2) && component.types.includes(AddressType.political))?.short_name;
+
+    if (county === undefined) {
+        const locality = (addressComponents.find(
+            component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name);
+        if (locality !== undefined && state !== undefined && independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
+            county = locality;
+        }
+    }
+
+    return county;
+}
+
+function extractCity(addressComponents: AddressComponent[]): string | undefined {
+    return (addressComponents.find(
+        component => component.types.includes(AddressType.neighborhood) && component.types.includes(AddressType.political))?.short_name)
+        ?? (addressComponents.find(
+            component => component.types.includes(AddressType.sublocality) && component.types.includes(AddressType.political))?.short_name)
+        ?? (addressComponents.find(
+            component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name);
+}
+
 function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse, requiredFields?: string[]): AddressDetails {
     const addressComponents = googleGeoCode.address_components;
     const country: string | undefined =
@@ -66,15 +91,8 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse
     const state: string | undefined =
         addressComponents.find(
             component => component.types.includes(AddressType.administrative_area_level_1) && component.types.includes(AddressType.political))?.short_name;
-    const county: string | undefined = addressComponents.find(
-        component => component.types.includes(AddressType.administrative_area_level_2) && component.types.includes(AddressType.political))?.short_name;
-    const city: string | undefined =
-        (addressComponents.find(
-            component => component.types.includes(AddressType.neighborhood) && component.types.includes(AddressType.political))?.short_name)
-        ?? (addressComponents.find(
-            component => component.types.includes(AddressType.sublocality) && component.types.includes(AddressType.political))?.short_name)
-        ?? (addressComponents.find(
-            component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name);
+    const county = extractCounty(addressComponents, state);
+    const city = extractCity(addressComponents);
     const street: string | undefined = addressComponents.find(
         component => component.types.includes(AddressType.route))?.short_name;
     const streetNumber: string | undefined = addressComponents.find(
@@ -136,7 +154,7 @@ export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResp
     }
     catch (e) {
         if (e.name === 'MissingAddressDetailsError') {
-            if (e.missingTypes.includes(AddressType.administrative_area_level_2) && (options.mfAutoFix === undefined || options.mfAutoFix)) {
+            if ((e.missingTypes.includes(AddressType.administrative_area_level_2) || e.missingTypes.includes(AddressType.route)) && (options.mfAutoFix === undefined || options.mfAutoFix)) {
                 const streetNumberRegex = /^[0-9]+\s|^[0-9]+-[0-9]+\s/;
                 const modifiedAddressText = googleGeoCodeResponse.formatted_address.replace(streetNumberRegex, '');
                 const newGoogleGeoCoderResponse = await getGoogleGeoCode(modifiedAddressText, options);

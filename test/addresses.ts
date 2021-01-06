@@ -494,3 +494,100 @@ export const concatedStreetNumbers = {
     ],
     "status": "OK"
 };
+
+
+export const independentCity = {
+    "results": [
+        {
+            "address_components": [
+                {
+                    "long_name": "2350",
+                    "short_name": "2350",
+                    "types": [
+                        "street_number"
+                    ]
+                },
+                {
+                    "long_name": "South Kenmore Road",
+                    "short_name": "S Kenmore Rd",
+                    "types": [
+                        "route"
+                    ]
+                },
+                {
+                    "long_name": "Chippenham Village",
+                    "short_name": "Chippenham Village",
+                    "types": [
+                        "neighborhood",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "Richmond",
+                    "short_name": "Richmond",
+                    "types": [
+                        "locality",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "Virginia",
+                    "short_name": "VA",
+                    "types": [
+                        "administrative_area_level_1",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "United States",
+                    "short_name": "US",
+                    "types": [
+                        "country",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "23225",
+                    "short_name": "23225",
+                    "types": [
+                        "postal_code"
+                    ]
+                },
+                {
+                    "long_name": "1939",
+                    "short_name": "1939",
+                    "types": [
+                        "postal_code_suffix"
+                    ]
+                }
+            ],
+            "formatted_address": "2350 S Kenmore Rd, Richmond, VA 23225, USA",
+            "geometry": {
+                "location": {
+                    "lat": 37.5329133,
+                    "lng": -77.5368024
+                },
+                "location_type": "ROOFTOP",
+                "viewport": {
+                    "northeast": {
+                        "lat": 37.5342622802915,
+                        "lng": -77.5354534197085
+                    },
+                    "southwest": {
+                        "lat": 37.5315643197085,
+                        "lng": -77.53815138029151
+                    }
+                }
+            },
+            "place_id": "ChIJ88LjLR8TsYkRdGBnOaIAhdY",
+            "plus_code": {
+                "compound_code": "GFM7+57 Richmond, VA, USA",
+                "global_code": "8794GFM7+57"
+            },
+            "types": [
+                "street_address"
+            ]
+        }
+    ],
+    "status": "OK"
+}

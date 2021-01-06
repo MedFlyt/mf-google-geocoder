@@ -1,6 +1,6 @@
 import { fromAddressText } from "../src/index";
 import { AddressComponent, AddressGeometry, AddressType, Status } from '@googlemaps/google-maps-services-js';
-import { concatedStreetNumbers, googleValidResponse } from "./addresses";
+import { concatedStreetNumbers, googleValidResponse, independentCity } from "./addresses";
 import * as dotenv from 'dotenv';
 dotenv.config();
 const apiKey = process.env.GOOGLE_API_TEST_KEY;
@@ -57,6 +57,36 @@ test('concat street numbers', async () => {
         zip: '11375',
         zipSuffix: null,
         fullAddress: '110-40 72nd Ave, Forest Hills, NY 11375, USA',
+        address2: null,
+        status: 'OK',
+        googleGeoCodeResponse: googleGeoCode
+    });
+});
+
+
+test('independent city', async () => {
+    const googleGeoCode = {
+        address_components: independentCity.results[0].address_components as AddressComponent[],
+        formatted_address: independentCity.results[0].formatted_address,
+        geometry: independentCity.results[0].geometry as AddressGeometry,
+        place_id: independentCity.results[0].place_id,
+        types: independentCity.results[0].types as AddressType[],
+        status: independentCity.status as Status
+    };
+
+    const address = '2350 S. Kenmore Rd Richmond VA 23225, USA';
+    const result = await fromAddressText(address, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
+    expect(result).toStrictEqual({
+        location: { lat: 37.5329133, lng: -77.5368024 },
+        country: 'US',
+        state: 'VA',
+        county: 'Richmond',
+        city: 'Chippenham Village',
+        street: 'S Kenmore Rd',
+        streetNumber: '2350',
+        zip: '23225',
+        zipSuffix: '1939',
+        fullAddress: '2350 S Kenmore Rd, Richmond, VA 23225, USA',
         address2: null,
         status: 'OK',
         googleGeoCodeResponse: googleGeoCode

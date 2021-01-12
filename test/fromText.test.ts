@@ -1,6 +1,6 @@
 import { fromAddressText } from "../src/index";
 import { AddressComponent, AddressGeometry, AddressType, Status } from '@googlemaps/google-maps-services-js';
-import { concatedStreetNumbers, googleValidResponse, independentCity } from "./addresses";
+import { concatedStreetNumbers, googleValidResponse, independentCity, township } from "./addresses";
 import * as dotenv from 'dotenv';
 dotenv.config();
 const apiKey = process.env.GOOGLE_API_TEST_KEY;
@@ -87,6 +87,36 @@ test('independent city', async () => {
         zip: '23225',
         zipSuffix: '1939',
         fullAddress: '2350 S Kenmore Rd, Richmond, VA 23225, USA',
+        address2: null,
+        status: 'OK',
+        googleGeoCodeResponse: googleGeoCode
+    });
+});
+
+
+test('township (administrative_level_3)', async () => {
+    const googleGeoCode = {
+        address_components: township.results[0].address_components as AddressComponent[],
+        formatted_address: township.results[0].formatted_address,
+        geometry: township.results[0].geometry as AddressGeometry,
+        place_id: township.results[0].place_id,
+        types: township.results[0].types as AddressType[],
+        status: township.status as Status
+    };
+
+    const address = '109 Tennis Ct, Wall Township, NJ 07719, USA';
+    const result = await fromAddressText(address, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
+    expect(result).toStrictEqual({
+        location: { lat: 40.1669944, lng: -74.07811029999999 },
+        country: 'US',
+        state: 'NJ',
+        county: 'Monmouth County',
+        city: 'Wall Township',
+        street: 'Tennis Ct',
+        streetNumber: '109',
+        zip: '07719',
+        zipSuffix: '9429',
+        fullAddress: '109 Tennis Ct, Wall Township, NJ 07719, USA',
         address2: null,
         status: 'OK',
         googleGeoCodeResponse: googleGeoCode

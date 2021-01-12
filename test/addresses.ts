@@ -591,3 +591,100 @@ export const independentCity = {
     ],
     "status": "OK"
 }
+
+
+export const township = {
+    "results": [
+        {
+            "address_components": [
+                {
+                    "long_name": "109",
+                    "short_name": "109",
+                    "types": [
+                        "street_number"
+                    ]
+                },
+                {
+                    "long_name": "Tennis Court",
+                    "short_name": "Tennis Ct",
+                    "types": [
+                        "route"
+                    ]
+                },
+                {
+                    "long_name": "Wall Township",
+                    "short_name": "Wall Township",
+                    "types": [
+                        "administrative_area_level_3",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "Monmouth County",
+                    "short_name": "Monmouth County",
+                    "types": [
+                        "administrative_area_level_2",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "New Jersey",
+                    "short_name": "NJ",
+                    "types": [
+                        "administrative_area_level_1",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "United States",
+                    "short_name": "US",
+                    "types": [
+                        "country",
+                        "political"
+                    ]
+                },
+                {
+                    "long_name": "07719",
+                    "short_name": "07719",
+                    "types": [
+                        "postal_code"
+                    ]
+                },
+                {
+                    "long_name": "9429",
+                    "short_name": "9429",
+                    "types": [
+                        "postal_code_suffix"
+                    ]
+                }
+            ],
+            "formatted_address": "109 Tennis Ct, Wall Township, NJ 07719, USA",
+            "geometry": {
+                "location": {
+                    "lat": 40.1669944,
+                    "lng": -74.07811029999999
+                },
+                "location_type": "ROOFTOP",
+                "viewport": {
+                    "northeast": {
+                        "lat": 40.1683433802915,
+                        "lng": -74.0767613197085
+                    },
+                    "southwest": {
+                        "lat": 40.1656454197085,
+                        "lng": -74.0794592802915
+                    }
+                }
+            },
+            "place_id": "ChIJy1QnuniHwYkR8sSDZexYxSU",
+            "plus_code": {
+                "compound_code": "5W8C+QQ Algers Mills, Wall Township, NJ, USA",
+                "global_code": "87G75W8C+QQ"
+            },
+            "types": [
+                "street_address"
+            ]
+        }
+    ],
+    "status": "OK"
+}

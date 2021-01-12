@@ -80,7 +80,9 @@ function extractCity(addressComponents: AddressComponent[]): string | undefined 
         ?? (addressComponents.find(
             component => component.types.includes(AddressType.sublocality) && component.types.includes(AddressType.political))?.short_name)
         ?? (addressComponents.find(
-            component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name);
+            component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name)
+        ?? (addressComponents.find(
+            component => component.types.includes(AddressType.administrative_area_level_3) && component.types.includes(AddressType.political))?.short_name);
 }
 
 function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse, requiredFields?: string[]): AddressDetails {

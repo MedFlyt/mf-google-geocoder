@@ -43,5 +43,6 @@ exports.independentCities = {
         "Winchester"
     ],
     'MO': ["St. Louis", "Saint Louis"],
-    'MD': ["Carson City"]
+    'NV': ["Carson City"],
+    'MD': ["Baltimore"]
 };

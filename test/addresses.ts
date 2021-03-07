@@ -107,7 +107,7 @@ export const googleValidResponse = {
                     }
                 }
             },
-            "place_id": "Ei42NzIgRnJhbmtsaW4gQXZlICMxRkwsIE5ldyBZb3JrLCBOWSAxMTIzOCwgVVNBIh8aHQoWChQKEgmT4r3inlvCiRH6mLpcCXRWkBIDMUZM",
+            "place_id": "Ei42NzIgRnJhbmtsaW4gQXZlICMxRkwsIEJyb29rbHluLCBOWSAxMTIzOCwgVVNBIh8aHQoWChQKEgmT4r3inlvCiRH6mLpcCXRWkBIDMUZM",
             "types": [
                 "subpremise"
             ]

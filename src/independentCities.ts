@@ -40,5 +40,6 @@ export const independentCities: { [stateName: string]: string[] } = {
         "Winchester"
     ],
     'MO': ["St. Louis", "Saint Louis"],
-    'MD': ["Carson City"]
+    'NV': ["Carson City"],
+    'MD': ["Baltimore"]
 }

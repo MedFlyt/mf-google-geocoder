@@ -1,3 +1,4 @@
+// tslint:disable-next-line:match-default-export-name
 import Axios from "axios";
 import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
 import { independentCities } from "./independentCities";
@@ -66,7 +67,7 @@ function extractCounty(addressComponents: AddressComponent[], state: string | un
     if (county === undefined) {
         const locality = (addressComponents.find(
             component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name);
-        if (locality !== undefined && state !== undefined && independentCities[state] !== undefined && independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
+        if (locality !== undefined && state !== undefined && state in independentCities && independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
             county = locality;
         }
     }

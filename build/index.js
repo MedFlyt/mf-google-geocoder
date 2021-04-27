@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fromAddressText = exports.fromGoogleGeoCode = exports.MissingAddressDetailsError = void 0;
+// tslint:disable-next-line:match-default-export-name
 const axios_1 = __importDefault(require("axios"));
 const google_maps_services_js_1 = require("@googlemaps/google-maps-services-js");
 const independentCities_1 = require("./independentCities");
@@ -30,7 +31,7 @@ function extractCounty(addressComponents, state) {
     let county = (_a = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.administrative_area_level_2) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _a === void 0 ? void 0 : _a.short_name;
     if (county === undefined) {
         const locality = ((_b = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.locality) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _b === void 0 ? void 0 : _b.short_name);
-        if (locality !== undefined && state !== undefined && independentCities_1.independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
+        if (locality !== undefined && state !== undefined && state in independentCities_1.independentCities && independentCities_1.independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
             county = locality;
         }
     }

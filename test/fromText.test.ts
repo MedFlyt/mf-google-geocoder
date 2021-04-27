@@ -93,6 +93,15 @@ test('independent city', async () => {
     });
 });
 
+test('cant find county', async () => {
+    const address = '513 Mundy Ln, Mt Vernon, NY 10550, USA';
+    try {
+        await fromAddressText(address, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
+    }
+    catch (e) {
+        expect(e.name).toBe('MissingAddressDetailsError');
+    }
+});
 
 test('township (administrative_level_3)', async () => {
     const googleGeoCode = {

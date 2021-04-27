@@ -66,7 +66,7 @@ function extractCounty(addressComponents: AddressComponent[], state: string | un
     if (county === undefined) {
         const locality = (addressComponents.find(
             component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name);
-        if (locality !== undefined && state !== undefined && independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
+        if (locality !== undefined && state !== undefined && independentCities[state] !== undefined && independentCities[state].map(city => city.toLocaleLowerCase()).includes(locality.toLocaleLowerCase())) {
             county = locality;
         }
     }

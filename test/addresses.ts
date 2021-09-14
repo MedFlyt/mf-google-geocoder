@@ -688,3 +688,173 @@ export const township = {
     ],
     "status": "OK"
 }
+
+export const addressCityNotInComponents = {
+    "results" : [
+       {
+          "address_components" : [
+             {
+                "long_name" : "446",
+                "short_name" : "446",
+                "types" : [ "street_number" ]
+             },
+             {
+                "long_name" : "East 98th Street",
+                "short_name" : "E 98th St",
+                "types" : [ "route" ]
+             },
+             {
+                "long_name" : "Brownsville",
+                "short_name" : "Brownsville",
+                "types" : [ "neighborhood", "political" ]
+             },
+             {
+                "long_name" : "Brooklyn2",
+                "short_name" : "Brooklyn2",
+                "types" : [ "political", "sublocality", "sublocality_level_1" ]
+             },
+             {
+                "long_name" : "Kings County",
+                "short_name" : "Kings County",
+                "types" : [ "administrative_area_level_2", "political" ]
+             },
+             {
+                "long_name" : "New York",
+                "short_name" : "NY",
+                "types" : [ "administrative_area_level_1", "political" ]
+             },
+             {
+                "long_name" : "United States",
+                "short_name" : "US",
+                "types" : [ "country", "political" ]
+             },
+             {
+                "long_name" : "11212",
+                "short_name" : "11212",
+                "types" : [ "postal_code" ]
+             },
+             {
+                "long_name" : "4255",
+                "short_name" : "4255",
+                "types" : [ "postal_code_suffix" ]
+             }
+          ],
+          "formatted_address" : "446 E 98th St, Brooklyn, NY 11212, USA",
+          "geometry" : {
+             "bounds" : {
+                "northeast" : {
+                   "lat" : 40.6576442,
+                   "lng" : -73.91463089999999
+                },
+                "southwest" : {
+                   "lat" : 40.65721970000001,
+                   "lng" : -73.91517879999999
+                }
+             },
+             "location" : {
+                "lat" : 40.6574084,
+                "lng" : -73.9149506
+             },
+             "location_type" : "ROOFTOP",
+             "viewport" : {
+                "northeast" : {
+                   "lat" : 40.6587809302915,
+                   "lng" : -73.91355586970849
+                },
+                "southwest" : {
+                   "lat" : 40.6560829697085,
+                   "lng" : -73.9162538302915
+                }
+             }
+          },
+          "place_id" : "ChIJUz2acY1cwokRB2pcTFIOWlg",
+          "types" : [ "premise" ]
+       }
+    ],
+    "status" : "OK"
+};
+
+export const addressCityWithoutStateAfterwards = {
+    "results" : [
+       {
+          "address_components" : [
+             {
+                "long_name" : "446",
+                "short_name" : "446",
+                "types" : [ "street_number" ]
+             },
+             {
+                "long_name" : "East 98th Street",
+                "short_name" : "E 98th St",
+                "types" : [ "route" ]
+             },
+             {
+                "long_name" : "Brownsville",
+                "short_name" : "Brownsville",
+                "types" : [ "neighborhood", "political" ]
+             },
+             {
+                "long_name" : "Brooklyn2",
+                "short_name" : "Brooklyn2",
+                "types" : [ "political", "sublocality", "sublocality_level_1" ]
+             },
+             {
+                "long_name" : "Kings County",
+                "short_name" : "Kings County",
+                "types" : [ "administrative_area_level_2", "political" ]
+             },
+             {
+                "long_name" : "New York",
+                "short_name" : "NY",
+                "types" : [ "administrative_area_level_1", "political" ]
+             },
+             {
+                "long_name" : "United States",
+                "short_name" : "US",
+                "types" : [ "country", "political" ]
+             },
+             {
+                "long_name" : "11212",
+                "short_name" : "11212",
+                "types" : [ "postal_code" ]
+             },
+             {
+                "long_name" : "4255",
+                "short_name" : "4255",
+                "types" : [ "postal_code_suffix" ]
+             }
+          ],
+          "formatted_address" : "446 E 98th St, Brooklyn, FOO 11212, USA",
+          "geometry" : {
+             "bounds" : {
+                "northeast" : {
+                   "lat" : 40.6576442,
+                   "lng" : -73.91463089999999
+                },
+                "southwest" : {
+                   "lat" : 40.65721970000001,
+                   "lng" : -73.91517879999999
+                }
+             },
+             "location" : {
+                "lat" : 40.6574084,
+                "lng" : -73.9149506
+             },
+             "location_type" : "ROOFTOP",
+             "viewport" : {
+                "northeast" : {
+                   "lat" : 40.6587809302915,
+                   "lng" : -73.91355586970849
+                },
+                "southwest" : {
+                   "lat" : 40.6560829697085,
+                   "lng" : -73.9162538302915
+                }
+             }
+          },
+          "place_id" : "ChIJUz2acY1cwokRB2pcTFIOWlg",
+          "types" : [ "premise" ]
+       }
+    ],
+    "status" : "OK"
+};

@@ -81,7 +81,7 @@ function extractCity(addressComponents: AddressComponent[], fullAddress: string)
         addressComponents.find(component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name,
         addressComponents.find(component => component.types.includes(AddressType.sublocality) && component.types.includes(AddressType.political))?.short_name,
         addressComponents.find(component => component.types.includes(AddressType.neighborhood) && component.types.includes(AddressType.political))?.short_name,
-        addressComponents.find(component => component.types.includes(AddressType.administrative_area_level_3) && component.types.includes(AddressType.political))?.short_name,
+        addressComponents.find(component => component.types.includes(AddressType.administrative_area_level_3) && component.types.includes(AddressType.political))?.short_name
     ].filter(a => a);
 
     const city = extractCityFromFullAddress(fullAddress);
@@ -94,7 +94,7 @@ function extractCity(addressComponents: AddressComponent[], fullAddress: string)
 }
 
 function extractCityFromFullAddress(fullAddress: string): string | null {
-    const parse = fullAddress.split(", ");
+    const parse: (string | undefined)[] = fullAddress.split(", ");
 
     if (parse.length > 1) {
         const [ , city, suffix ] = parse;
@@ -103,7 +103,7 @@ function extractCityFromFullAddress(fullAddress: string): string | null {
             const [ state ] = suffix.split(" ");
 
             if (state.length === 2 && state.toUpperCase() === state) {
-                return city;
+                return city as string;
             }
         }
     }

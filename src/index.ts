@@ -57,6 +57,7 @@ export class MissingAddressDetailsError extends Error {
     constructor(public missingTypes: (AddressType | GeocodingAddressComponentType | PlaceType2)[], public message: string) {
         super(message);
         this.name = 'MissingAddressDetailsError';
+        Object.setPrototypeOf(this, MissingAddressDetailsError.prototype);
     }
 }
 
@@ -75,15 +76,39 @@ function extractCounty(addressComponents: AddressComponent[], state: string | un
     return county;
 }
 
-function extractCity(addressComponents: AddressComponent[]): string | undefined {
-    return (addressComponents.find(
-        component => component.types.includes(AddressType.neighborhood) && component.types.includes(AddressType.political))?.short_name)
-        ?? (addressComponents.find(
-            component => component.types.includes(AddressType.sublocality) && component.types.includes(AddressType.political))?.short_name)
-        ?? (addressComponents.find(
-            component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name)
-        ?? (addressComponents.find(
-            component => component.types.includes(AddressType.administrative_area_level_3) && component.types.includes(AddressType.political))?.short_name);
+function extractCity(addressComponents: AddressComponent[], fullAddress: string): string | undefined {
+    const parts = [
+        addressComponents.find(component => component.types.includes(AddressType.locality) && component.types.includes(AddressType.political))?.short_name,
+        addressComponents.find(component => component.types.includes(AddressType.sublocality) && component.types.includes(AddressType.political))?.short_name,
+        addressComponents.find(component => component.types.includes(AddressType.neighborhood) && component.types.includes(AddressType.political))?.short_name,
+        addressComponents.find(component => component.types.includes(AddressType.administrative_area_level_3) && component.types.includes(AddressType.political))?.short_name,
+    ].filter(a => a);
+
+    const city = extractCityFromFullAddress(fullAddress);
+
+    if (city !== null && parts.includes(city)) {
+        return city;
+    }
+
+    return parts.length > 0 ? parts[0] : undefined;
+}
+
+function extractCityFromFullAddress(fullAddress: string): string | null {
+    const parse = fullAddress.split(", ");
+
+    if (parse.length > 1) {
+        const [ , city, suffix ] = parse;
+
+        if (suffix !== undefined) {
+            const [ state ] = suffix.split(" ");
+
+            if (state.length === 2 && state.toUpperCase() === state) {
+                return city;
+            }
+        }
+    }
+
+    return null;
 }
 
 function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse, requiredFields?: string[]): AddressDetails {
@@ -95,7 +120,7 @@ function parseGoogleGeoCodeToAddressDetails(googleGeoCode: GoogleGeoCodeResponse
         addressComponents.find(
             component => component.types.includes(AddressType.administrative_area_level_1) && component.types.includes(AddressType.political))?.short_name;
     const county = extractCounty(addressComponents, state);
-    const city = extractCity(addressComponents);
+    const city = extractCity(addressComponents, googleGeoCode.formatted_address);
     const street: string | undefined = addressComponents.find(
         component => component.types.includes(AddressType.route))?.short_name;
     const streetNumber: string | undefined = addressComponents.find(
@@ -156,7 +181,7 @@ export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResp
         return parseGoogleGeoCodeToAddressDetails(googleGeoCodeResponse, requiredFields);
     }
     catch (e) {
-        if (e.name === 'MissingAddressDetailsError') {
+        if (e instanceof MissingAddressDetailsError) {
             if ((e.missingTypes.includes(AddressType.administrative_area_level_2) || e.missingTypes.includes(AddressType.route)) && (options.mfAutoFix === undefined || options.mfAutoFix)) {
                 const streetNumberRegex = /^[0-9]+\s|^[0-9]+-[0-9]+\s/;
                 const modifiedAddressText = googleGeoCodeResponse.formatted_address.replace(streetNumberRegex, '');

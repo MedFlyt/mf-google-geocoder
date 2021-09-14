@@ -3,7 +3,7 @@ JS library that uses Google Geocoding API (https only) and parses the response i
 
 ## Usage Example
  ```javascript
- const address = '672 Franklin Ave #1FL, Brooklyn, NY 11238, USA';
+ const address = '672 Franklin Ave #1fl, Brooklyn, NY 11238, USA';
     try {
         const result = await fromAddressText(address, { apiKey, mfAutoFix: true });
         console.log(result.city)

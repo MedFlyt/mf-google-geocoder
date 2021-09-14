@@ -15,20 +15,20 @@ test('valid address', async () => {
         status: googleValidResponse.status as Status
     };
 
-    const address = '672 Franklin Ave #1FL, Brooklyn, NY 11238, USA';
+    const address = '672 Franklin Ave #1fl, Brooklyn, NY 11238, USA';
     const result = await fromAddressText(address, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
     expect(result).toStrictEqual({
         location: { lat: 40.6754925, lng: -73.9564748 },
         country: 'US',
         state: 'NY',
         county: 'Kings County',
-        city: 'Crown Heights',
+        city: 'Brooklyn',
         street: 'Franklin Ave',
         streetNumber: '672',
         zip: '11238',
         zipSuffix: '3880',
-        fullAddress: '672 Franklin Ave #1FL, Brooklyn, NY 11238, USA',
-        address2: '#1FL',
+        fullAddress: '672 Franklin Ave #1fl, Brooklyn, NY 11238, USA',
+        address2: '#1fl',
         status: 'OK',
         googleGeoCodeResponse: googleGeoCode
     });
@@ -81,7 +81,7 @@ test('independent city', async () => {
         country: 'US',
         state: 'VA',
         county: 'Richmond',
-        city: 'Chippenham Village',
+        city: 'Richmond',
         street: 'S Kenmore Rd',
         streetNumber: '2350',
         zip: '23225',

@@ -3,8 +3,8 @@ export const googleValidResponse = {
         {
             "address_components": [
                 {
-                    "long_name": "1FL",
-                    "short_name": "1FL",
+                    "long_name": "1fl",
+                    "short_name": "1fl",
                     "types": [
                         "subpremise"
                     ]
@@ -79,7 +79,7 @@ export const googleValidResponse = {
                     ]
                 }
             ],
-            "formatted_address": "672 Franklin Ave #1FL, Brooklyn, NY 11238, USA",
+            "formatted_address": "672 Franklin Ave #1fl, Brooklyn, NY 11238, USA",
             "geometry": {
                 "bounds": {
                     "northeast": {
@@ -107,7 +107,7 @@ export const googleValidResponse = {
                     }
                 }
             },
-            "place_id": "Ei42NzIgRnJhbmtsaW4gQXZlICMxRkwsIEJyb29rbHluLCBOWSAxMTIzOCwgVVNBIh8aHQoWChQKEgmT4r3inlvCiRH6mLpcCXRWkBIDMUZM",
+            "place_id": "Ei42NzIgRnJhbmtsaW4gQXZlICMxZmwsIEJyb29rbHluLCBOWSAxMTIzOCwgVVNBIh8aHQoWChQKEgmT4r3inlvCiRH6mLpcCXRWkBIDMWZs",
             "types": [
                 "subpremise"
             ]
@@ -136,8 +136,8 @@ export const nonValidStreet = {
                         ]
                     },
                     {
-                        "long_name": "The Bronx",
-                        "short_name": "The Bronx",
+                        "long_name": "Bronx",
+                        "short_name": "Bronx",
                         "types": [
                             "political",
                             "sublocality",
@@ -168,7 +168,7 @@ export const nonValidStreet = {
                         ]
                     }
                 ],
-                "formatted_address": "2811 Exterior St, The Bronx, NY 10463, USA",
+                "formatted_address": "2811 Exterior St, Bronx, NY 10463, USA",
                 "geometry": {
                     "bounds": {
                         "northeast": {
@@ -223,8 +223,8 @@ export const nonValidStreet = {
                         ]
                     },
                     {
-                        "long_name": "The Bronx",
-                        "short_name": "The Bronx",
+                        "long_name": "Bronx",
+                        "short_name": "Bronx",
                         "types": [
                             "political",
                             "sublocality",
@@ -263,7 +263,7 @@ export const nonValidStreet = {
                         ]
                     }
                 ],
-                "formatted_address": "Exterior St, The Bronx, NY 10463, USA",
+                "formatted_address": "Exterior St, Bronx, NY 10463, USA",
                 "geometry": {
                     "bounds": {
                         "northeast": {

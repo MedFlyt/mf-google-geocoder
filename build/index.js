@@ -44,7 +44,7 @@ function extractCity(addressComponents, fullAddress) {
         (_a = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.locality) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _a === void 0 ? void 0 : _a.short_name,
         (_b = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.sublocality) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _b === void 0 ? void 0 : _b.short_name,
         (_c = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.neighborhood) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _c === void 0 ? void 0 : _c.short_name,
-        (_d = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.administrative_area_level_3) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _d === void 0 ? void 0 : _d.short_name,
+        (_d = addressComponents.find(component => component.types.includes(google_maps_services_js_1.AddressType.administrative_area_level_3) && component.types.includes(google_maps_services_js_1.AddressType.political))) === null || _d === void 0 ? void 0 : _d.short_name
     ].filter(a => a);
     const city = extractCityFromFullAddress(fullAddress);
     if (city !== null && parts.includes(city)) {

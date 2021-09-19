@@ -1,20 +1,14 @@
 const path = require('path');
+const TerserPlugin = require("terser-webpack-plugin");
+
 
 module.exports = {
     target: ['web', 'es5'],
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader'
-            },
-            {
-                use: {
-                    loader: 'babel-loader',
-                    options: { presets: ['es2015'] }
-                },
-                test: /\.js$/,
-                exclude: /node_modules/
+                test: /\.ts|.js$/,
+                use: 'babel-loader'
 
             }
         ],
@@ -30,5 +24,11 @@ module.exports = {
         libraryTarget: 'umd',
         globalObject: 'this',
         umdNamedDefine: true
+    },
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin()
+        ]
     }
 };

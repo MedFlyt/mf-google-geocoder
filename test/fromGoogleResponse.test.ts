@@ -1,7 +1,9 @@
-import { fromGoogleGeoCode, MissingAddressDetailsError } from "../src/index";
 import { AddressComponent, AddressGeometry, AddressType, Status } from '@googlemaps/google-maps-services-js';
-import { googleValidResponse, noNeighborhood, nonValidStreet } from "./addresses";
 import * as dotenv from 'dotenv';
+import { expect, test } from "vitest";
+import { fromGoogleGeoCode, MissingAddressDetailsError } from "../src/index";
+import { googleValidResponse, noNeighborhood, nonValidStreet } from "./addresses";
+
 dotenv.config();
 const apiKey = process.env.GOOGLE_API_TEST_KEY;
 
@@ -53,21 +55,117 @@ test('non valid street', async () => {
   };
 
   const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
-  expect(result).toStrictEqual({
-    location: { lat: 40.8751173, lng: -73.90615939999999 },
-    country: 'US',
-    state: 'NY',
-    county: 'Bronx County',
-    city: 'Bronx',
-    street: 'Exterior St',
-    streetNumber: null,
-    zip: '10463',
-    zipSuffix: null,
-    fullAddress: 'Exterior St, Bronx, NY 10463, USA',
-    address2: null,
-    status: 'OK',
-    googleGeoCodeResponse: validGoogleGeoCode
-  });
+  expect(result).toMatchInlineSnapshot(`
+    {
+      "address2": null,
+      "city": "Bronx",
+      "country": "US",
+      "county": "Bronx County",
+      "fullAddress": "Exterior St, Bronx, NY 10463, USA",
+      "googleGeoCodeResponse": {
+        "address_components": [
+          {
+            "long_name": "Exterior Street",
+            "short_name": "Exterior St",
+            "types": [
+              "route",
+            ],
+          },
+          {
+            "long_name": "West Bronx",
+            "short_name": "West Bronx",
+            "types": [
+              "neighborhood",
+              "political",
+            ],
+          },
+          {
+            "long_name": "Bronx",
+            "short_name": "Bronx",
+            "types": [
+              "political",
+              "sublocality",
+              "sublocality_level_1",
+            ],
+          },
+          {
+            "long_name": "Bronx County",
+            "short_name": "Bronx County",
+            "types": [
+              "administrative_area_level_2",
+              "political",
+            ],
+          },
+          {
+            "long_name": "New York",
+            "short_name": "NY",
+            "types": [
+              "administrative_area_level_1",
+              "political",
+            ],
+          },
+          {
+            "long_name": "United States",
+            "short_name": "US",
+            "types": [
+              "country",
+              "political",
+            ],
+          },
+          {
+            "long_name": "10463",
+            "short_name": "10463",
+            "types": [
+              "postal_code",
+            ],
+          },
+        ],
+        "formatted_address": "Exterior St, Bronx, NY 10463, USA",
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.87674880000003,
+              "lng": -73.9061478,
+            },
+            "southwest": {
+              "lat": 40.87336999999997,
+              "lng": -73.90672579999999,
+            },
+          },
+          "location": {
+            "lat": 40.8749487,
+            "lng": -73.9061478,
+          },
+          "location_type": "GEOMETRIC_CENTER",
+          "viewport": {
+            "northeast": {
+              "lat": 40.87674880000003,
+              "lng": -73.90508781970848,
+            },
+            "southwest": {
+              "lat": 40.87336999999997,
+              "lng": -73.9077857802915,
+            },
+          },
+        },
+        "place_id": "EiFFeHRlcmlvciBTdCwgQnJvbngsIE5ZIDEwNDYzLCBVU0EiLiosChQKEgntZ35_kfPCiRHGnUDn0OPECRIUChIJEZFB7ZTzwokRAJGpM3WCFRw",
+        "status": "OK",
+        "types": [
+          "route",
+        ],
+      },
+      "location": {
+        "lat": 40.8749487,
+        "lng": -73.9061478,
+      },
+      "state": "NY",
+      "status": "OK",
+      "street": "Exterior St",
+      "streetNumber": null,
+      "zip": "10463",
+      "zipSuffix": null,
+    }
+  `);
 });
 
 test('non valid street with nullable fields', async () => {

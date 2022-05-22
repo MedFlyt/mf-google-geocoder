@@ -16,7 +16,7 @@
     "lint-fix": "tslint --project ./src/tsconfig.json --format stylish --fix",
     "test": "vitest",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
+    "prepublishOnly": "npm test -- run && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"

@@ -1,0 +1,37 @@
+name: CI
+on:
+  push:
+    branches-ignore:
+      - master
+      - production
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: "npm"
+
+      - name: 📦 Install deps
+        run: npm ci
+
+      - name: 🧹 Lint
+        run: npm run eslint
+
+      - name: ⚙️ TSC
+        run: npm run tsc
+
+      - name: 📦 Build
+        run: npm run build
+
+      - name: ✅ Test
+        run: npm run test

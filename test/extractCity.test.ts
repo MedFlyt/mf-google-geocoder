@@ -1,9 +1,11 @@
-import { fromGoogleGeoCode } from "../src/index";
 import { AddressComponent, AddressGeometry, AddressType, Status } from '@googlemaps/google-maps-services-js';
-import { addressCityNotInComponents, addressCityWithoutStateAfterwards, googleValidResponse } from "./addresses";
 import * as dotenv from 'dotenv';
+import { test, expect } from "vitest";
+import { fromGoogleGeoCode } from "../src/index";
+import { addressCityNotInComponents, addressCityWithoutStateAfterwards, googleValidResponse } from "./addresses";
 dotenv.config();
 const apiKey = process.env.GOOGLE_API_TEST_KEY;
+
 
 test('city that exists in the components', async () => {
     const googleGeoCode = {

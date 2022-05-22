@@ -13,6 +13,9 @@ export default defineConfig({
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "mf-google-geocoder",
             fileName: (format) => `mf-google-geocoder.${format}.js`
+        },
+        rollupOptions: {
+            external: ["@googlemaps/google-maps-services-js", "axios"]
         }
     }
 });

@@ -8,6 +8,36 @@ interface Geo {
     lng: number;
 }
 
+interface AddressComponents {
+    location: Geo;
+    country: string;
+    administrativeAreaLevel1: string;
+    administrativeAreaLevel2: string;
+    sublocalityLevel1?: string | null;
+    neighborhood?: string | null;
+    locality?: string | null;
+    administrativeLevels?: {
+        level1short?: string | null;
+    } | null;
+    formatedAddressDetails?: FormatedAddressDetails;
+}
+
+interface FormatedAddressDetails {
+    location: Geo;
+    address1: string;
+    country: string;
+    state: string;
+    county: string;
+    fullAddress: string;
+    city?: string | null;
+    zip5?: string | null;
+    zip4?: string | null;
+    street?: string | null;
+    streetNumber?: string | null;
+    crossStreet?: string | null;
+    address2?: string | null;
+}
+
 export interface Options {
     /** google API key */
     apiKey: string,
@@ -204,6 +234,95 @@ export const fromAddressText = async (addressText: string, options: Options, req
     }
     const googleResponse = await getGoogleGeoCode(modifiedAddressText, options);
     return fromGoogleGeoCode(googleResponse, options, requiredFields);
+}
+
+export function toMfAddressComponents(
+    googleAddressComponents: AddressDetails
+): AddressComponents {
+    let addressComponentsCountry = null;
+    let administrativeAreaLevel1 = null;
+    let administrativeAreaLevel2: any = null;
+    let sublocalityLevel1 = null;
+    let neighborhood = null;
+    let locality = null;
+
+    googleAddressComponents.googleGeoCodeResponse.address_components.forEach((section: any) => {
+        if (
+            section.types.indexOf("sublocality_level_1") > -1 ||
+            section.types.indexOf("sublocality") > -1
+        ) {
+            sublocalityLevel1 = section.short_name;
+        }
+        if (section.types.indexOf("locality") > -1) {
+            locality = section.short_name;
+        }
+        if (section.types.indexOf("neighborhood") > -1) {
+            neighborhood = section.short_name;
+        }
+        if (section.types.indexOf("administrative_area_level_1") > -1) {
+            administrativeAreaLevel1 = section.short_name;
+        }
+        if (section.types.indexOf("administrative_area_level_2") > -1) {
+            administrativeAreaLevel2 = section.short_name;
+        }
+        if (section.types.indexOf("country") > -1) {
+            addressComponentsCountry = section.short_name;
+        }
+    });
+
+    // tslint:disable-next-line:strict-type-predicates
+    if (addressComponentsCountry === null || administrativeAreaLevel1 === null) {
+        throw new Error(
+            "bad address components!\n" +
+                JSON.stringify(googleAddressComponents.googleGeoCodeResponse.address_components)
+        );
+    }
+
+    if (
+        googleAddressComponents.country === null ||
+        googleAddressComponents.county === null ||
+        googleAddressComponents.state === null
+    ) {
+        throw new Error(
+            "Cannot have null address fields: " +
+                "country: " +
+                googleAddressComponents.country +
+                ", state: " +
+                googleAddressComponents.state +
+                ", county: " +
+                googleAddressComponents.county
+        );
+    }
+    const formatedAddress: FormatedAddressDetails = {
+        location: googleAddressComponents.location,
+        address1:
+            (googleAddressComponents.streetNumber === null
+                ? ""
+                : googleAddressComponents.streetNumber + " ") + googleAddressComponents.street,
+        address2: googleAddressComponents.address2,
+        country: googleAddressComponents.country,
+        state: googleAddressComponents.state,
+        county: googleAddressComponents.county,
+        city: googleAddressComponents.city,
+        zip5: googleAddressComponents.zip,
+        zip4: googleAddressComponents.zipSuffix,
+        street: googleAddressComponents.street,
+        streetNumber: googleAddressComponents.streetNumber,
+        crossStreet: null,
+        fullAddress: googleAddressComponents.fullAddress
+    };
+    const patientAddressComponents: AddressComponents = {
+        location: googleAddressComponents.googleGeoCodeResponse.geometry.location,
+        country: addressComponentsCountry,
+        administrativeAreaLevel1: administrativeAreaLevel1,
+        administrativeAreaLevel2: administrativeAreaLevel2 === null ? "" : administrativeAreaLevel2,
+        sublocalityLevel1: sublocalityLevel1,
+        neighborhood: neighborhood,
+        locality: locality,
+        formatedAddressDetails: formatedAddress
+    };
+
+    return patientAddressComponents;
 }
 
 async function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {

@@ -354,18 +354,18 @@ test('independent city', async () => {
           "formatted_address": "2350 S Kenmore Rd, Richmond, VA 23225, USA",
           "geometry": {
             "location": {
-              "lat": 37.5329297,
-              "lng": -77.53668499999999,
+              "lat": 37.5333175,
+              "lng": -77.53781889999999,
             },
             "location_type": "ROOFTOP",
             "viewport": {
               "northeast": {
-                "lat": 37.5342653302915,
-                "lng": -77.5354383697085,
+                "lat": 37.5346858802915,
+                "lng": -77.53631741970848,
               },
               "southwest": {
-                "lat": 37.5315673697085,
-                "lng": -77.53813633029151,
+                "lat": 37.5319879197085,
+                "lng": -77.53901538029149,
               },
             },
           },
@@ -376,8 +376,8 @@ test('independent city', async () => {
           ],
         },
         "location": {
-          "lat": 37.5329297,
-          "lng": -77.53668499999999,
+          "lat": 37.5333175,
+          "lng": -77.53781889999999,
         },
         "state": "VA",
         "status": "OK",

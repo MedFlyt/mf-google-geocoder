@@ -39,7 +39,7 @@
   "homepage": "https://github.com/MedFlyt/mf-google-geocoder#readme",
   "dependencies": {
     "@googlemaps/google-maps-services-js": "3.1.13",
-    "axios": "0.21.0"
+    "axios": "0.21.2"
   },
   "devDependencies": {
     "@types/node": "14.14.10",

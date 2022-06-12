@@ -35,3 +35,5 @@ jobs:
 
       - name: ✅ Test
         run: npm run test
+        env:
+          GOOGLE_API_TEST_KEY: ${{ secrets.GOOGLE_API_TEST_KEY }}

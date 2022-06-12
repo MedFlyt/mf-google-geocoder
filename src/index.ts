@@ -1,5 +1,5 @@
 // tslint:disable-next-line:match-default-export-name
-import Axios from "axios";
+import Axios, { AxiosResponse } from "axios";
 import { AddressComponent, AddressGeometry, AddressType, GeocodingAddressComponentType, PlaceType2, Status } from '@googlemaps/google-maps-services-js';
 import { independentCities } from "./independentCities";
 
@@ -215,7 +215,7 @@ export const fromGoogleGeoCode = async (googleGeoCodeResponse: GoogleGeoCodeResp
             if ((e.missingTypes.includes(AddressType.administrative_area_level_2) || e.missingTypes.includes(AddressType.route)) && (options.mfAutoFix === undefined || options.mfAutoFix)) {
                 const streetNumberRegex = /^[0-9]+\s|^[0-9]+-[0-9]+\s/;
                 const modifiedAddressText = googleGeoCodeResponse.formatted_address.replace(streetNumberRegex, '');
-                const newGoogleGeoCoderResponse = await getGoogleGeoCode(modifiedAddressText, options);
+                const newGoogleGeoCoderResponse = await getGoogleGeoCodeWithAddress(modifiedAddressText, options);
                 return parseGoogleGeoCodeToAddressDetails(newGoogleGeoCoderResponse, requiredFields);
             } else {
                 throw e;
@@ -232,7 +232,13 @@ export const fromAddressText = async (addressText: string, options: Options, req
     if (options.mfAutoFix === undefined || options.mfAutoFix) {
         modifiedAddressText = addressText.replace(streetNumbersRegex, "$1-$3");
     }
-    const googleResponse = await getGoogleGeoCode(modifiedAddressText, options);
+    const googleResponse = await getGoogleGeoCodeWithAddress(modifiedAddressText, options);
+    return fromGoogleGeoCode(googleResponse, options, requiredFields);
+}
+
+export const fromPlaceId = async (placeId: string, options: Options, requiredFields?: string[]): Promise<AddressDetails> => {
+    const googleResponse = await getGoogleGeoCodeWithPlaceId(placeId, options);
+
     return fromGoogleGeoCode(googleResponse, options, requiredFields);
 }
 
@@ -325,10 +331,35 @@ export function toMfAddressComponents(
     return patientAddressComponents;
 }
 
-async function getGoogleGeoCode(addressText: string, options: Options): Promise<GoogleGeoCodeResponse> {
-    const response = await Axios.get(
-        "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-        encodeURIComponent(addressText) + '&key=' + options.apiKey)
+async function getGoogleGeoCodeWithAddress(
+  addressText: string,
+  options: Options
+): Promise<GoogleGeoCodeResponse> {
+  const response = await Axios.get(
+    "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+      encodeURIComponent(addressText) +
+      "&key=" +
+      options.apiKey
+  );
+
+  return handleResponse(response);
+}
+
+async function getGoogleGeoCodeWithPlaceId(
+  placeId: string,
+  options: Options
+): Promise<GoogleGeoCodeResponse> {
+  const response = await Axios.get(
+    "https://maps.googleapis.com/maps/api/geocode/json?place_id=" +
+      encodeURIComponent(placeId) +
+      "&key=" +
+      options.apiKey
+  );
+
+  return handleResponse(response);
+}
+
+async function handleResponse(response: AxiosResponse): Promise<GoogleGeoCodeResponse> {
     if (
         response.status < 200 ||
         response.status > 300

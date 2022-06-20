@@ -55,6 +55,7 @@ test('non valid street', async () => {
   };
 
   const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
+  console.log(result)
   expect(result).toMatchInlineSnapshot(`
     {
       "address2": null,
@@ -120,7 +121,7 @@ test('non valid street', async () => {
             ],
           },
         ],
-        "formatted_address": "Exterior St, Bronx, NY 10463, USA",
+        "formatted_address": "Exterior St,The Bronx, NY 10463, USA",
         "geometry": {
           "bounds": {
             "northeast": {

@@ -62,7 +62,7 @@ test('non valid street', async () => {
       "city": "The Bronx",
       "country": "US",
       "county": "Bronx County",
-      "fullAddress": "Exterior St,The Bronx, NY 10463, USA",
+      "fullAddress": "Exterior St, The Bronx, NY 10463, USA",
       "googleGeoCodeResponse": {
         "address_components": [
           {
@@ -121,7 +121,7 @@ test('non valid street', async () => {
             ],
           },
         ],
-        "formatted_address": "Exterior St,The Bronx, NY 10463, USA",
+        "formatted_address": "Exterior St, The Bronx, NY 10463, USA",
         "geometry": {
           "bounds": {
             "northeast": {

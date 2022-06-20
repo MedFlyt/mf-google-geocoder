@@ -58,10 +58,10 @@ test('non valid street', async () => {
   expect(result).toMatchInlineSnapshot(`
     {
       "address2": null,
-      "city": "Bronx",
+      "city": "The Bronx",
       "country": "US",
       "county": "Bronx County",
-      "fullAddress": "Exterior St, Bronx, NY 10463, USA",
+      "fullAddress": "Exterior St,The Bronx, NY 10463, USA",
       "googleGeoCodeResponse": {
         "address_components": [
           {

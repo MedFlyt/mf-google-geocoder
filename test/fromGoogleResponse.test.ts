@@ -149,7 +149,7 @@ test('non valid street', async () => {
             },
           },
         },
-        "place_id": "EiFFeHRlcmlvciBTdCwgQnJvbngsIE5ZIDEwNDYzLCBVU0EiLiosChQKEgntZ35_kfPCiRHGnUDn0OPECRIUChIJEZFB7ZTzwokRAJGpM3WCFRw",
+        "place_id": "EiVFeHRlcmlvciBTdCwgVGhlIEJyb254LCBOWSAxMDQ2MywgVVNBIi4qLAoUChIJ7Wd-f5HzwokRxp1A59DjxAkSFAoSCRGRQe2U88KJEQCRqTN1ghUc",
         "status": "OK",
         "types": [
           "route",

@@ -55,13 +55,14 @@ test('non valid street', async () => {
   };
 
   const result = await fromGoogleGeoCode(nonValidGoogleGeoCode, { apiKey, mfAutoFix: true }, ['county', 'state', 'city', 'street', 'zip']);
+  console.log(result)
   expect(result).toMatchInlineSnapshot(`
     {
       "address2": null,
-      "city": "Bronx",
+      "city": "The Bronx",
       "country": "US",
       "county": "Bronx County",
-      "fullAddress": "Exterior St, Bronx, NY 10463, USA",
+      "fullAddress": "Exterior St, The Bronx, NY 10463, USA",
       "googleGeoCodeResponse": {
         "address_components": [
           {
@@ -80,8 +81,8 @@ test('non valid street', async () => {
             ],
           },
           {
-            "long_name": "Bronx",
-            "short_name": "Bronx",
+            "long_name": "The Bronx",
+            "short_name": "The Bronx",
             "types": [
               "political",
               "sublocality",
@@ -120,7 +121,7 @@ test('non valid street', async () => {
             ],
           },
         ],
-        "formatted_address": "Exterior St, Bronx, NY 10463, USA",
+        "formatted_address": "Exterior St, The Bronx, NY 10463, USA",
         "geometry": {
           "bounds": {
             "northeast": {
@@ -148,7 +149,7 @@ test('non valid street', async () => {
             },
           },
         },
-        "place_id": "EiFFeHRlcmlvciBTdCwgQnJvbngsIE5ZIDEwNDYzLCBVU0EiLiosChQKEgntZ35_kfPCiRHGnUDn0OPECRIUChIJEZFB7ZTzwokRAJGpM3WCFRw",
+        "place_id": "EiVFeHRlcmlvciBTdCwgVGhlIEJyb254LCBOWSAxMDQ2MywgVVNBIi4qLAoUChIJ7Wd-f5HzwokRxp1A59DjxAkSFAoSCRGRQe2U88KJEQCRqTN1ghUc",
         "status": "OK",
         "types": [
           "route",

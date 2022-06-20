@@ -80,8 +80,8 @@ test('non valid street', async () => {
             ],
           },
           {
-            "long_name": "Bronx",
-            "short_name": "Bronx",
+            "long_name": "The Bronx",
+            "short_name": "The Bronx",
             "types": [
               "political",
               "sublocality",
